@@ -105,6 +105,7 @@ const sendEmailNotification = async (contactData) => {
       `
     };
 
+    
     const info = await transporter.sendMail(mailOptions);
     console.log('Email notification sent:', info.messageId);
     return true;
