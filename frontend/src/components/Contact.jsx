@@ -23,8 +23,8 @@ const Contact = () => {
     e.preventDefault();
     
     try {
-      // https://myportfolio-1-nsz9.onrender.com
-      const response = await fetch('https://myportfolio-1-nsz9.onrender.com/api/contact', {
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+      const response = await fetch(`${backendUrl}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

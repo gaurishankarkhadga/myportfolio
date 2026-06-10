@@ -17,7 +17,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "*", 
+    origin: "*",
     methods: ["GET", "POST"]
   }
 });
@@ -69,21 +69,29 @@ const contactSchema = new mongoose.Schema({
 // Contact Model
 const Contact = mongoose.model('Contact', contactSchema);
 
-// Configure Nodemailer
+// Configure Nodemailer with environment variable sanitization (removes accidental quotes/whitespace)
+const emailUser = (process.env.EMAIL_USER || '').trim().replace(/^["']|["']$/g, '');
+const emailPass = (process.env.EMAIL_PASS || '').trim().replace(/^["']|["']$/g, '');
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER || 'ggs699000@gmail.com',
-    pass: process.env.EMAIL_PASS || 'uuwf ctzd uuvx rxhf'
+    user: emailUser,
+    pass: emailPass
   }
 });
 
 // Function to send email notification
 const sendEmailNotification = async (contactData) => {
   try {
+    if (!emailUser || !emailPass) {
+      console.warn('Skipping email notification: EMAIL_USER or EMAIL_PASS not configured.');
+      return false;
+    }
+
     const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, 
+      from: emailUser,
+      to: emailUser,
       subject: `New Contact Form Submitted: ${contactData.subject}`,
       html: `
         <h2>New Contact Form Submission</h2>
@@ -112,36 +120,36 @@ const sendEmailNotification = async (contactData) => {
 const verifyToken = async (req, res, next) => {
   try {
     let token;
-    
+
     // Check for token in headers
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
       // Get token from header
       token = req.headers.authorization.split(' ')[1];
       console.log("Token received:", token ? `${token.substring(0, 10)}...` : "Invalid token");
     }
-    
+
     // Make sure token exists
     if (!token) {
       console.log("No token provided in Authorization header");
       return res.status(401).json({ message: 'Not authorized, no token' });
     }
-    
+
     try {
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       console.log("Token verified for user ID:", decoded.id);
-      
+
       // Get user from the token
       const user = await User.findById(decoded.id).select('-password');
-      
+
       if (!user) {
         console.log("User not found with token ID:", decoded.id);
         return res.status(401).json({ message: 'Not authorized, user not found' });
       }
-      
+
       // Update user's last active timestamp
       await User.findByIdAndUpdate(user._id, { lastActiveAt: Date.now() });
-      
+
       // Add user to request object
       req.user = user;
       next();
@@ -171,21 +179,21 @@ const authenticateSocket = async (socket, token) => {
     if (!token) {
       throw new Error('No token provided');
     }
-    
+
     // Clean the token if needed (remove quotes, trim whitespace)
     const cleanToken = token.replace(/^["']|["']$/g, '').trim();
-    
+
     // Verify JWT token
     const decoded = jwt.verify(cleanToken, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id).select('-password');
-    
+
     if (!user) {
       throw new Error('User not found');
     }
-    
+
     // Update user's last active timestamp
     await User.findByIdAndUpdate(user._id, { lastActiveAt: Date.now() });
-    
+
     return user;
   } catch (error) {
     throw new Error(`Authentication failed: ${error.message}`);
@@ -196,26 +204,26 @@ const authenticateSocket = async (socket, token) => {
 io.on('connection', async (socket) => {
   console.log('New client connected:', socket.id);
   let authenticatedUser = null;
-  
+
   // Check if token was provided in the connection auth
   if (socket.handshake.auth && socket.handshake.auth.token) {
     try {
       const token = socket.handshake.auth.token;
       console.log("Socket auth token received from connection params");
-      
+
       authenticatedUser = await authenticateSocket(socket, token);
-      
+
       if (authenticatedUser) {
         socket.userId = authenticatedUser._id;
         console.log(`Socket ${socket.id} authenticated as user ${authenticatedUser.username}`);
-        
+
         // Join authenticated room
         socket.join('authenticated');
-        
+
         // Send active users list to the newly authenticated user
         const activeUsers = await getActiveUsers();
         socket.emit('active_users', activeUsers);
-        
+
         // Broadcast to all other users that a new user is online
         socket.to('authenticated').emit('active_users', activeUsers);
       }
@@ -223,35 +231,35 @@ io.on('connection', async (socket) => {
       console.error('Socket auth error from connection params:', error);
     }
   }
-  
+
   // Traditional authenticate event (as backup)
   socket.on('authenticate', async (token) => {
     try {
       authenticatedUser = await authenticateSocket(socket, token);
-      
+
       // Store user ID in socket object
       socket.userId = authenticatedUser._id;
       console.log(`Socket ${socket.id} authenticated via event as user ${authenticatedUser.username}`);
-      
+
       // Join a room for all authenticated users
       socket.join('authenticated');
-      
+
       // Send active users list to the newly authenticated user
       const activeUsers = await getActiveUsers();
       socket.emit('active_users', activeUsers);
-      
+
       // Let user know they're authenticated
       socket.emit('authenticated', { success: true });
-      
+
       // Broadcast to all other users that a new user is online
       socket.to('authenticated').emit('active_users', activeUsers);
-      
+
     } catch (error) {
       console.error('Socket authentication error:', error);
       socket.emit('auth_error', error.message);
     }
   });
-  
+
   // Rest of socket event handlers...
 });
 
@@ -265,11 +273,11 @@ io.on('connection', async (socket) => {
 async function getActiveUsers() {
   try {
     const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
-    
+
     const activeUsers = await User.find({
       lastActiveAt: { $gte: fifteenMinutesAgo }
     }).select('username avatar lastActiveAt _id');
-    
+
     console.log(`Found ${activeUsers.length} active users`);
     return activeUsers;
   } catch (error) {
@@ -284,31 +292,31 @@ const setupSocketHandlers = (io) => {
   io.on('connection', async (socket) => {
     console.log('New client connected:', socket.id);
     let authenticatedUser = null;
-    
+
     // Check if token was provided in the connection auth
     if (socket.handshake.auth && socket.handshake.auth.token) {
       try {
         const token = socket.handshake.auth.token;
         console.log("Socket auth token received from connection params");
-        
+
         // Verify JWT token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         authenticatedUser = await User.findById(decoded.id).select('-password');
-        
+
         if (authenticatedUser) {
           socket.userId = authenticatedUser._id;
           console.log(`Socket ${socket.id} authenticated as user ${authenticatedUser.username}`);
-          
+
           // Update user's last active timestamp
           await User.findByIdAndUpdate(authenticatedUser._id, { lastActiveAt: Date.now() });
-          
+
           // Join authenticated room
           socket.join('authenticated');
-          
+
           // Send active users list to the newly authenticated user
           const activeUsers = await getActiveUsers();
           socket.emit('active_users', activeUsers);
-          
+
           // Broadcast to all other users that a new user is online
           socket.to('authenticated').emit('active_users', activeUsers);
         }
@@ -316,7 +324,7 @@ const setupSocketHandlers = (io) => {
         console.error('Socket auth error from connection params:', error);
       }
     }
-    
+
     // Traditional authenticate event (as backup)
     socket.on('authenticate', async (token) => {
       try {
@@ -325,45 +333,45 @@ const setupSocketHandlers = (io) => {
           socket.emit('auth_error', 'No token provided');
           return;
         }
-        
+
         console.log("Socket auth token received from event");
-        
+
         // Verify JWT token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         authenticatedUser = await User.findById(decoded.id).select('-password');
-        
+
         if (!authenticatedUser) {
           console.log("User not found with token ID:", decoded.id);
           socket.emit('auth_error', 'User not found');
           return;
         }
-        
+
         // Store user ID in socket object
         socket.userId = authenticatedUser._id;
         console.log(`Socket ${socket.id} authenticated via event as user ${authenticatedUser.username}`);
-        
+
         // Update user's last active timestamp
         await User.findByIdAndUpdate(authenticatedUser._id, { lastActiveAt: Date.now() });
-        
+
         // Join a room for all authenticated users
         socket.join('authenticated');
-        
+
         // Send active users list to the newly authenticated user
         const activeUsers = await getActiveUsers();
         socket.emit('active_users', activeUsers);
-        
+
         // Let user know they're authenticated
         socket.emit('authenticated', { success: true });
-        
+
         // Broadcast to all other users that a new user is online
         socket.to('authenticated').emit('active_users', activeUsers);
-        
+
       } catch (error) {
         console.error('Socket authentication error:', error);
         socket.emit('auth_error', 'Authentication failed: ' + error.message);
       }
     });
-    
+
     // Handle new messages - with extra error handling
     socket.on('send_message', async (messageData) => {
       try {
@@ -372,40 +380,40 @@ const setupSocketHandlers = (io) => {
           socket.emit('message_error', 'Authentication required');
           return;
         }
-        
+
         // Basic validation
         if (!messageData || !messageData.content || !messageData.content.trim()) {
           socket.emit('message_error', 'Message content is required');
           return;
         }
-        
+
         console.log(`Received message from user ${socket.userId}: ${messageData.content}`);
-        
+
         // Create and save message to database
         const newMessage = new Message({
           content: messageData.content.trim(),
           user: socket.userId
         });
-        
+
         const savedMessage = await newMessage.save();
         console.log(`Message saved with ID: ${savedMessage._id}`);
-        
+
         // Populate user data before broadcasting
         await savedMessage.populate('user', 'username avatar _id');
-        
+
         // Broadcast to all authenticated users including sender
         io.to('authenticated').emit('new_message', savedMessage);
-        
+
       } catch (error) {
         console.error('Message handling error:', error);
         socket.emit('message_error', 'Failed to send message: ' + error.message);
       }
     });
-    
+
     // Handle disconnection
     socket.on('disconnect', async () => {
       console.log('Client disconnected:', socket.id);
-      
+
       // If user was authenticated, update active users
       if (socket.userId) {
         // Wait a moment before updating active users to avoid frequent updates
@@ -429,15 +437,15 @@ app.use('/api/auth', authRoutes);
 app.get('/api/messages', verifyToken, async (req, res) => {
   try {
     console.log(`Fetching messages for user: ${req.user.username}`);
-    
+
     // Get the last 50 messages, sorted by creation date
     const messages = await Message.find()
       .populate('user', 'username avatar _id')
       .sort({ createdAt: -1 })
       .limit(50);
-    
+
     console.log(`Found ${messages.length} messages`);
-    
+
     // Return in chronological order (oldest first)
     res.status(200).json(messages.reverse());
   } catch (error) {
@@ -450,31 +458,31 @@ app.get('/api/messages', verifyToken, async (req, res) => {
 app.post('/api/messages', verifyToken, async (req, res) => {
   try {
     const { content } = req.body;
-    
+
     console.log(`Message creation attempt by user: ${req.user.username}`);
     console.log(`Message content: ${content}`);
-    
+
     // Validate required fields
     if (!content || !content.trim()) {
       return res.status(400).json({ success: false, error: 'Message content is required' });
     }
-    
+
     // Create new message
     const newMessage = new Message({
       content: content.trim(),
       user: req.user._id
     });
-    
+
     // Save to database
     const savedMessage = await newMessage.save();
     console.log(`Message saved with ID: ${savedMessage._id}`);
-    
+
     // Populate user info before returning
     await savedMessage.populate('user', 'username avatar _id');
-    
+
     // Broadcast to all connected clients via socket.io
     io.to('authenticated').emit('new_message', savedMessage);
-    
+
     // Send success response
     res.status(201).json(savedMessage);
   } catch (error) {
@@ -489,12 +497,12 @@ app.post('/api/messages', verifyToken, async (req, res) => {
 app.post('/api/contact', async (req, res) => {
   try {
     const { name, phone, email, subject, message } = req.body;
-    
+
     // Validate required fields
     if (!name || !phone || !email || !subject || !message) {
       return res.status(400).json({ success: false, error: 'All fields are required' });
     }
-    
+
     // Create new contact entry
     const newContact = new Contact({
       name,
@@ -503,13 +511,13 @@ app.post('/api/contact', async (req, res) => {
       subject,
       message
     });
-    
+
     // Save to database
     await newContact.save();
-    
+
     // Send email notification
     await sendEmailNotification(newContact);
-    
+
     // Send success response
     res.status(201).json({
       success: true,

@@ -6,8 +6,8 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import './Community.css';
 
-// API URL - Make sure this matches your backend URL exactly
-const API_URL = import.meta.env.VITE_API_URL;
+// API URL - Loaded from environment variables with local fallback
+const API_URL = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 console.log('API URL:', API_URL);
 const Community = () => {

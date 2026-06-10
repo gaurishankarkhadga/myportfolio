@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-// API URL - Should match the one used in Community.jsx
-const API_URL = 'http://localhost:8000';
+// API URL - Loaded from environment variables with local fallback
+const API_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
 
 const AuthContext = createContext();
 
