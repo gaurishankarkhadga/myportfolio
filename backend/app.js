@@ -589,7 +589,14 @@ app.post('/api/contact', async (req, res) => {
     await newContact.save();
 
     // Send email notification
-    await sendEmailNotification(newContact);
+    const emailSent = await sendEmailNotification(newContact);
+
+    if (!emailSent) {
+      return res.status(500).json({
+        success: false,
+        error: 'Message saved, but failed to send email notification. Please check server logs.'
+      });
+    }
 
     // Send success response
     res.status(201).json({
