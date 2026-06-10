@@ -1,0 +1,413 @@
+:root {
+  --primary: #00f3ff;
+  --secondary: #ff00c8;
+  --accent: #39ff14;
+
+  --dark: #0a0a0f;
+  --light: #ffffff;
+  --nav-start-width: 180px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --nav-start-width: 210px;
+  }
+}
+
+.navbar-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--nav-start-width);
+  max-width: 80%;
+
+  background: rgba(10, 10, 10, 0.75);
+
+  /* Original animations exactly as requested without rainbowShift */
+  animation: dropFromTop 1.4s ease-out forwards,
+             navbarBufferProgress 2.3s ease-in-out forwards 1.0s;
+  backdrop-filter: blur(15px); 
+  -webkit-backdrop-filter: blur(15px); 
+  z-index: 1000;
+  border-radius: 120px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: visible;
+  margin: 0 auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 50%;
+}
+
+.navbar-container:hover {
+  transform: translateX(-50%) scale(1.02);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  border-radius: 120px;
+  height: 42px;
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--light);
+  text-decoration: none;
+  cursor: pointer;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  transition: none;
+  opacity: 0.7;
+  transform: scale(0.85);
+  transform-origin: left center;
+  animation: scaleLogo 2.3s ease-in-out forwards 1.0s;
+  white-space: nowrap;
+}
+
+.logo:hover {
+  text-shadow: none;
+  color: var(--light);
+  transform: none;
+}
+
+.menu-items {
+  display: flex;
+  gap: 1.2rem;
+  text-transform: uppercase;
+}
+
+.menu-item {
+  position: relative;
+  color: var(--light);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0.5rem 1.2rem;
+  opacity: 0;
+  /* Original animation */
+  animation: menuItemLoad 3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  transition: color 0.3s ease, transform 0.3s ease;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.5); /* Text glow for better visibility */
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.menu-item:hover, .menu-item.active {
+  color: #f8fafc;
+}
+
+.menu-item::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(59, 130, 246, 0.15);
+  top: 0;
+  left: 0;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+  border-radius: 8px;
+}
+
+.menu-item:hover::before {
+  transform: translateY(0);
+}
+
+.menu-item::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 3px;
+  background-color: #3bf680;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 1.5px;
+}
+
+.menu-item:hover::after, .menu-item.active::after {
+  width: 60%;
+}
+
+/* ====== Enhanced Menu Button Styles ====== */
+.menu-button {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--light);
+  cursor: pointer;
+  z-index: 1002;
+  position: relative;
+  outline: none;
+  padding: 5px;
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+}
+
+/* Hamburger Icon */
+.hamburger-icon {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Hamburger Lines */
+.line {
+  position: absolute;
+  width: 80%;
+  height: 3px;
+  border-radius: 3px;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  background: linear-gradient(45deg, rgba(0, 255, 170, 0.7), rgba(0, 255, 170, 0.5));
+}
+
+.line-1 {
+  transform: translateY(-8px);
+}
+
+.line-3 {
+  transform: translateY(8px);
+}
+
+/* Hamburger Animation */
+.hamburger-icon.active .line-1 {
+  transform: translateY(0) rotate(45deg);
+  background: linear-gradient(
+    90deg, 
+    var(--accent), 
+    var(--primary)
+  );
+  box-shadow: 0 0 10px var(--accent),
+              0 0 15px var(--primary);
+}
+
+.hamburger-icon.active .line-2 {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.hamburger-icon.active .line-3 {
+  transform: translateY(0) rotate(-45deg);
+  background: linear-gradient(
+    90deg, 
+    var(--primary), 
+    var(--accent)
+  );
+  box-shadow: 0 0 10px var(--primary),
+              0 0 15px var(--accent);
+}
+
+/* Pulse Animation for Menu Button */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 243, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 243, 255, 0);
+  }
+}
+
+.menu-button:hover {
+  transform: scale(1.1);
+}
+
+.menu-button:hover .line {
+  animation: pulse 1.5s infinite;
+}
+
+/* Animations */
+@keyframes scaleLogo {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleMenuBtn {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes dropFromTop {
+  0% {
+    top: -100px;
+    transform: translateX(-50%) scale(0.8);
+    opacity: 0;
+  }
+  70% {
+    top: 30px;
+    transform: translateX(-50%) scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    top: 20px;
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes navbarBufferProgress {
+  100% {
+    width: 90%;
+    border-radius: 120px;
+  }
+}
+
+@keyframes menuItemLoad {
+  0% {
+    transform: translateZ(-200px) translateY(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateZ(0) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Menu Item Animation Delays */
+.menu-items > a:nth-child(1) { animation-delay: 1.5s; }
+.menu-items > a:nth-child(2) { animation-delay: 1.6s; }
+.menu-items > a:nth-child(3) { animation-delay: 1.7s; }
+.menu-items > a:nth-child(4) { animation-delay: 1.8s; }
+.menu-items > a:nth-child(5) { animation-delay: 1.9s; }
+.menu-items > a:nth-child(6) { animation-delay: 2.0s; }
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .menu-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+    transform: scale(0.6);
+    transform-origin: right center;
+    animation: scaleMenuBtn 2.3s ease-in-out forwards 1.0s;
+  }
+  
+  .menu-button:active {
+    transform: scale(0.9);
+  }
+
+
+
+  .menu-items {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 300px;
+    height: 100vh;
+    background: rgba(15, 15, 20, 0.95);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.6rem;
+    transition: right 0.3s ease-in-out;
+    padding: 2rem;
+    z-index: 1001;
+  }
+
+  .menu-items.show {
+    display: flex;
+    right: 0;
+  }
+
+  .menu-item {
+    width: 200px;
+    text-align: center;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 769px) {
+  .navbar-container {
+    overflow: hidden;
+  }
+
+  .navbar {
+    width: 100%;
+  }
+
+  .menu-items {
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+    gap: 1.2rem;
+    position: static;
+    background: transparent;
+    justify-content: end;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-items .menu-item {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .menu-items .menu-item:active {
+    transform: translateY(1px);
+    text-shadow: none;
+  }
+
+  .navbar-container {
+    max-width: 92%;
+  }
+}
+
+@media (min-width: 769px) {
+  .menu-items .menu-item {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 1.2rem;
+    border-radius: 0;
+  }
+
+  .menu-items .menu-item:active {
+    transform: translateY(1px);
+  }
+
+  .menu-items .menu-item::before {
+    border-radius: 0;
+  }
+
+  .menu-items .menu-item::after {
+    border-radius: 0;
+    bottom: 0;
+  }
+  
+/* Inherits global delays */
+
+}

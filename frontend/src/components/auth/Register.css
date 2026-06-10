@@ -1,0 +1,317 @@
+.auth-register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: #181818;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  perspective: 1000px;
+  overflow: hidden;
+  position: relative;
+  margin-top: -30px;
+}
+
+.auth-register-container::before {
+  content: '';
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle at center, rgba(122, 82, 255, 0.1) 0%, transparent 70%);
+  animation: auth-register-pulse 15s infinite alternate;
+}
+
+@keyframes auth-register-pulse {
+  0% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 0.7; transform: scale(1.5); }
+}
+
+.auth-register-card {
+  background: rgba(30, 30, 30, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: auth-register-cardEntrance 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+}
+
+@keyframes auth-register-cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(30px) rotateX(10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+.auth-register-card::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(45deg, #ff3366, #7a52ff);
+  border-radius: 50%;
+  opacity: 0.1;
+  filter: blur(80px);
+  z-index: -1;
+  transition: all 0.6s ease;
+}
+
+.auth-register-card::after {
+  content: '';
+  position: absolute;
+  bottom: -100px;
+  right: -100px;
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(45deg, #00ccff, #7a52ff);
+  border-radius: 50%;
+  opacity: 0.1;
+  filter: blur(80px);
+  z-index: -1;
+  transition: all 0.6s ease;
+}
+
+.auth-register-card:hover::before {
+  transform: scale(1.2);
+  opacity: 0.15;
+}
+
+.auth-register-card:hover::after {
+  transform: scale(1.2);
+  opacity: 0.15;
+}
+
+.auth-register-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.auth-register-title {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.025em;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: auth-register-fadeInUp 0.7s forwards;
+  background: linear-gradient(90deg, #ffffff, #7a52ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.auth-register-subtitle {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: auth-register-fadeInUp 0.7s 0.1s forwards;
+}
+
+.auth-register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.auth-register-error {
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  background-color: rgba(255, 59, 48, 0.1);
+  border-left: 3px solid #ff3b30;
+  border-radius: 8px;
+  color: #ff7b75;
+  font-size: 0.9rem;
+  opacity: 0;
+  animation: auth-register-shakeX 0.7s forwards, auth-register-fadeIn 0.5s forwards;
+}
+
+@keyframes auth-register-shakeX {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes auth-register-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.auth-register-input-group {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: auth-register-fadeInUp 0.7s forwards;
+}
+
+.auth-register-input-group:nth-child(1) { animation-delay: 0.2s; }
+.auth-register-input-group:nth-child(2) { animation-delay: 0.3s; }
+.auth-register-input-group:nth-child(3) { animation-delay: 0.4s; }
+.auth-register-input-group:nth-child(4) { animation-delay: 0.5s; }
+
+.auth-register-input-wrapper {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.auth-register-input-wrapper:focus-within {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 0 3px rgba(122, 82, 255, 0.2);
+}
+
+.auth-register-input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  transition: color 0.3s ease;
+}
+
+.auth-register-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.auth-register-input:focus {
+  color: white;
+}
+
+.auth-register-input:focus + .auth-register-input-icon {
+  color: #7a52ff;
+}
+
+.auth-register-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.auth-register-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  background: linear-gradient(90deg, #7a52ff 0%, #ff3366 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: auth-register-fadeInUp 0.7s 0.6s forwards;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-register-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.7s ease;
+}
+
+.auth-register-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(122, 82, 255, 0.4);
+}
+
+.auth-register-button:hover::before {
+  left: 100%;
+}
+
+.auth-register-button:active {
+  transform: translateY(1px);
+}
+
+.auth-register-links {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: auth-register-fadeInUp 0.7s 0.7s forwards;
+}
+
+.auth-register-signin-link {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.3s ease;
+}
+
+.auth-register-signin-link span {
+  color: #7a52ff;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.auth-register-signin-link:hover {
+  color: white;
+}
+
+.auth-register-signin-link:hover span {
+  color: #ff3366;
+}
+
+@keyframes auth-register-fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 480px) {
+  .auth-register-card {
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 90%;
+  }
+  
+  .auth-register-title {
+    font-size: 2rem;
+  }
+  
+  .auth-register-form {
+    gap: 1rem;
+  }
+  
+  .auth-register-container {
+    width: 100%;
+  }
+}

@@ -1,0 +1,1352 @@
+/* Modern Community Chat Styling */
+/* Reset and base styles */
+:root {
+  --primary-color: #181818;
+  --primary-light: #181818;
+  --primary-dark: #4338ca;
+  --secondary-color: #10b981;
+  --dark-bg: #111827;
+  --light-bg: #181818;
+  --card-bg: #f9fafb;
+  --hover-bg: #f3f4f6;
+  --border-color: #e5e7eb;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --text-light: #9ca3af;
+  --danger: #ef4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --info: #181818;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --sidebar-width: 280px;
+  --header-height: 70px;
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.4s ease;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Apply base styles to the container */
+.comm-app-container {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  width: 100vw;
+  position: fixed;
+  margin-top: -365px;
+}
+
+/* Header styling with gradient background */
+.comm-app-header {
+  background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
+  color: white;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  position: relative;
+  z-index: 10;
+}
+
+.comm-app-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #ffffff, #e0e7ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.5px;
+}
+
+.comm-app-header p {
+  margin: 0.5rem 0 0;
+  font-size: 1rem;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+/* Main content area */
+.comm-app-content {
+  display: flex;
+  flex: 1;
+  margin: 1.5rem;
+  /* background-color: var(--light-bg); */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  position: relative;
+  height: calc(100vh - var(--header-height) - 3rem);
+  max-height: 800px;
+  margin-top: 100px;
+}
+
+/* Sidebar styling */
+.comm-app-sidebar {
+  width: var(--sidebar-width);
+  background-color: #fcfcfd;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.comm-app-sidebar-header {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  background: linear-gradient(to right, #f8fafc, #f1f5f9);
+}
+
+.comm-app-sidebar-header h3 {
+  margin: 0 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.comm-app-sidebar-header svg {
+  color: var(--primary-color);
+}
+
+/* Users list */
+.comm-app-users-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 0;
+}
+
+.comm-app-users-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comm-app-users-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.comm-app-users-list::-webkit-scrollbar-thumb {
+  background-color: var(--text-light);
+  border-radius: 20px;
+}
+
+.comm-app-user-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  transition: background-color var(--transition-fast);
+  border-radius: var(--radius-md);
+  margin: 0 0.5rem 0.25rem;
+  cursor: pointer;
+}
+
+.comm-app-user-item:hover {
+  background-color: var(--hover-bg);
+}
+
+.comm-app-user-avatar {
+  position: relative;
+  margin-right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid white;
+}
+
+.comm-app-user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comm-app-user-avatar svg {
+  color: var(--text-secondary);
+}
+
+.comm-app-user-status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--success);
+  border: 2px solid white;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.comm-app-user-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.comm-app-no-users {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Chat area styling */
+.comm-app-chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--light-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Error message styling */
+.comm-app-error {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  margin: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  animation: slideInDown 0.3s ease forwards;
+  border-left: 3px solid var(--danger);
+}
+
+.comm-app-error button {
+  background: none;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0 0.5rem;
+  opacity: 0.8;
+  transition: opacity var(--transition-fast);
+}
+
+.comm-app-error button:hover {
+  opacity: 1;
+}
+
+/* Messages container */
+.comm-app-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23f0f0f0' fill-opacity='0.5' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+.comm-app-messages::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comm-app-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.comm-app-messages::-webkit-scrollbar-thumb {
+  background-color: var(--text-light);
+  border-radius: 20px;
+}
+
+/* Loading state */
+.comm-app-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.comm-app-loading:after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  margin-left: 12px;
+  border: 2px solid var(--primary-light);
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Empty messages state */
+.comm-app-no-messages {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 2rem;
+}
+
+.comm-app-no-messages svg {
+  color: var(--text-light);
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.comm-app-no-messages p {
+  font-size: 0.95rem;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+/* Message styling */
+.comm-app-message {
+  display: flex;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.3s ease;
+  max-width: 85%;
+}
+
+.comm-app-message-own {
+  flex-direction: row-reverse;
+  margin-left: auto;
+}
+
+.comm-app-message-avatar {
+  margin-right: 0.75rem;
+  margin-left: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(45deg, #66ba5c, #0d090c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #66ba5c;
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.comm-app-message-own .comm-app-message-avatar {
+  margin-right: 0;
+  margin-left: 0.75rem;
+}
+
+.comm-app-message-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comm-app-message-content {
+  background-color: var(--card-bg);
+  padding: 0.75rem 1rem;
+  border-radius: 18px;
+  border-top-left-radius: 4px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  max-width: calc(100% - 50px);
+}
+
+.comm-app-message-own .comm-app-message-content {
+  background-color: var(--primary-light);
+  color: white;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 4px;
+}
+
+.comm-app-message-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+}
+
+.comm-app-message-username {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-right: 0.5rem;
+}
+
+.comm-app-message-own .comm-app-message-username {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.comm-app-message-time {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+}
+
+.comm-app-message-own .comm-app-message-time {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.comm-app-message-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.comm-app-message-own .comm-app-message-text {
+  color: white;
+}
+
+/* Message form */
+.comm-app-message-form {
+  display: flex;
+  padding: 1rem 1.5rem;
+  background-color: #fafafa;
+  border-top: 1px solid var(--border-color);
+  position: relative;
+  z-index: 2;
+}
+
+.comm-app-message-input {
+  flex: 1;
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.95rem;
+  background-color: white;
+  transition: all var(--transition-fast);
+  font-family: var(--font-sans);
+  box-shadow: var(--shadow-sm);
+}
+
+.comm-app-message-input:focus {
+  outline: none;
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.comm-app-send-button {
+  background: linear-gradient(45deg, #1aff00, #0d090c);
+  color: white;
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.75rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+
+}
+
+.comm-app-send-button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.comm-app-send-button:active {
+  transform: translateY(0);
+}
+
+.comm-app-send-button svg {
+  stroke-width: 2.5px;
+  width: 18px;
+  height: 18px;
+  transform: translateX(1px);
+}
+
+/* Auth required screen */
+.comm-app-auth-required {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+.comm-app-auth-required svg {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  opacity: 0.8;
+}
+
+.comm-app-auth-required h2 {
+  font-size: 1.75rem;
+  margin: 0 0 0.75rem;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.comm-app-auth-required p {
+  font-size: 1rem;
+  max-width: 320px;
+  margin: 0 0 2rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.comm-app-auth-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.comm-app-login-btn,
+.comm-app-register-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  font-size: 0.95rem;
+  min-width: 120px;
+}
+
+.comm-app-login-btn {
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.comm-app-login-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px -2px rgba(79, 70, 229, 0.3);
+}
+
+.comm-app-register-btn {
+  background-color: white;
+  color: var(--primary-color);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.comm-app-register-btn:hover {
+  border-color: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Media queries for responsive design */
+@media (max-width: 992px) {
+  .comm-app-content {
+    margin: 1rem;
+    height: calc(100vh - var(--header-height) - 2rem);
+  }
+
+  .comm-app-header {
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .comm-app-sidebar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 20;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .comm-app-sidebar.active {
+    transform: translateX(0);
+  }
+
+  .comm-app-toggle-sidebar {
+    display: flex;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 30;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-fast);
+  }
+
+  .comm-app-toggle-sidebar:hover {
+    transform: scale(1.05);
+  }
+
+  .comm-app-message {
+    max-width: 95%;
+  }
+}
+
+@media (max-width: 576px) {
+  .comm-app-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .comm-app-header p {
+    font-size: 0.875rem;
+  }
+
+  .comm-app-content {
+    margin: 0.5rem;
+    height: calc(100vh - var(--header-height) - 1rem);
+  }
+
+  .comm-app-messages {
+    padding: 1rem;
+  }
+
+  .comm-app-message-form {
+    padding: 0.75rem 1rem;
+  }
+
+  .comm-app-message {
+    margin-bottom: 1rem;
+  }
+
+  .comm-app-message-input {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .comm-app-send-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .comm-app-auth-buttons {
+    flex-direction: column;
+    width: 100%;
+    max-width: 240px;
+  }
+
+  .comm-app-login-btn,
+  .comm-app-register-btn {
+    width: 100%;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --light-bg: #1f2937;
+    --card-bg: #111827;
+    --dark-bg: #030712;
+    --hover-bg: #374151;
+    --border-color: #374151;
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-light: #9ca3af;
+  }
+
+  .comm-app-container {
+    background: linear-gradient(135deg, #111827 0%, #0f172a 100%);
+  }
+
+  .comm-app-header {
+    background: linear-gradient(to right, var(--primary-dark), #312e81);
+  }
+
+  .comm-app-sidebar {
+    background-color: #1a1c25;
+  }
+
+  .comm-app-sidebar-header {
+    background: linear-gradient(to right, #111827, #1f2937);
+    border-color: #374151;
+  }
+
+  .comm-app-user-avatar {
+    background-color: #374151;
+    border-color: #111827;
+  }
+
+  .comm-app-user-status {
+    border-color: #111827;
+  }
+
+  .comm-app-messages {
+    background-image:
+      linear-gradient(rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.9)),
+      url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23374151' fill-opacity='0.3' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  .comm-app-message-content {
+    background-color: #374151;
+  }
+
+  .comm-app-message-own .comm-app-message-content {
+    background-color: var(--primary-dark);
+  }
+
+  .comm-app-message-form {
+    background-color: #111827;
+    border-color: #374151;
+  }
+
+  .comm-app-message-input {
+    background-color: #1f2937;
+    border-color: #4b5563;
+    color: var(--text-primary);
+  }
+
+  .comm-app-message-input::placeholder {
+    color: var(--text-light);
+  }
+
+  .comm-app-auth-required {
+    background: linear-gradient(135deg, #111827 0%, #0f172a 100%);
+  }
+
+  .comm-app-login-btn {
+    background-color: var(--primary-dark);
+  }
+
+  .comm-app-register-btn {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: var(--text-primary);
+  }
+
+  /* Additional theme enhancements */
+  .comm-app-message-input:focus {
+    border-color: var(--primary-dark);
+    box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.3);
+  }
+
+  /* Custom scrollbar for dark mode */
+  .comm-app-messages::-webkit-scrollbar-thumb,
+  .comm-app-users-list::-webkit-scrollbar-thumb {
+    background-color: #4b5563;
+  }
+
+  /* End of dark mode support */
+
+  /* Additional modern enhancements */
+  /* Message bubbles with gradients */
+  .comm-app-message-content {
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .comm-app-message-content:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .comm-app-message-own .comm-app-message-content {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  }
+
+  /* Glass morphism effect on some elements */
+  .comm-app-header {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Pulse animation for the user status */
+  .comm-app-user-status {
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+
+    70% {
+      box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+    }
+
+    100% {
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+  }
+
+  /* Enhanced typing animation */
+  .comm-app-typing {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0.5rem 0 1rem 3rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .comm-app-typing-dots {
+    display: flex;
+    margin-left: 0.5rem;
+  }
+
+  .comm-app-typing-dot {
+    background-color: var(--text-secondary);
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin-right: 3px;
+    animation: typingDot 1.4s infinite ease-in-out;
+  }
+
+  .comm-app-typing-dot:nth-child(1) {
+    animation-delay: 0s;
+  }
+
+  .comm-app-typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .comm-app-typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+    margin-right: 0;
+  }
+
+  @keyframes typingDot {
+
+    0%,
+    60%,
+    100% {
+      transform: translateY(0);
+    }
+
+    30% {
+      transform: translateY(-5px);
+    }
+  }
+
+  /* Enhanced user interactions */
+  .comm-app-user-item {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .comm-app-user-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0) 70%);
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    border-radius: var(--radius-md);
+  }
+
+  .comm-app-user-item:hover::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Enhanced buttons */
+  .comm-app-send-button {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .comm-app-send-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  .comm-app-send-button:active::after {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 1;
+    transition: transform 0s ease, opacity 0.2s ease;
+  }
+
+  /* Enhanced message transitions */
+  .comm-app-message {
+    transition: all 0.3s ease;
+  }
+
+  /* Modern popup animations */
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Enhanced hover effects for buttons */
+  .comm-app-login-btn,
+  .comm-app-register-btn {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .comm-app-login-btn::after,
+  .comm-app-register-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s ease;
+  }
+
+  .comm-app-login-btn:hover::after,
+  .comm-app-register-btn:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Elegant scrollbar for modern browsers */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--text-light);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-secondary);
+  }
+
+  /* Loading skeleton animation for messages while loading */
+  .comm-app-skeleton {
+    background: linear-gradient(90deg,
+        var(--card-bg) 25%,
+        var(--hover-bg) 50%,
+        var(--card-bg) 75%);
+    background-size: 200% 100%;
+    animation: skeletonLoading 1.5s infinite;
+    border-radius: var(--radius-md);
+    height: 80px;
+    margin-bottom: 1rem;
+  }
+
+  @keyframes skeletonLoading {
+    0% {
+      background-position: 200% 0;
+    }
+
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Emoji picker enhancements */
+  .comm-app-emoji-button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    margin-right: 0.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+  }
+
+  .comm-app-emoji-button:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary-color);
+  }
+
+  .comm-app-emoji-picker {
+    position: absolute;
+    bottom: 70px;
+    left: 1.5rem;
+    background-color: var(--light-bg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    width: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 0.5rem;
+    animation: scaleIn 0.2s ease;
+    z-index: 10;
+    border: 1px solid var(--border-color);
+  }
+
+  .comm-app-emoji-item {
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-fast);
+  }
+
+  .comm-app-emoji-item:hover {
+    background-color: var(--hover-bg);
+    transform: scale(1.2);
+  }
+
+  /* File attachment styling */
+  .comm-app-attachment-button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    margin-right: 0.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+  }
+
+  .comm-app-attachment-button:hover {
+    background-color: var(--hover-bg);
+    color: var(--primary-color);
+  }
+
+  .comm-app-attachment-preview {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    background-color: var(--card-bg);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.5rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .comm-app-attachment-name {
+    margin-left: 0.5rem;
+    font-size: 0.85rem;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .comm-app-attachment-remove {
+    background: none;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 1.1rem;
+    opacity: 0.7;
+    transition: opacity var(--transition-fast);
+  }
+
+  .comm-app-attachment-remove:hover {
+    opacity: 1;
+  }
+
+  /* Message reactions */
+  .comm-app-reactions {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+    gap: 0.25rem;
+  }
+
+  .comm-app-reaction {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.4rem;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+
+  .comm-app-reaction:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .comm-app-reaction-count {
+    margin-left: 0.2rem;
+    font-weight: 500;
+  }
+
+  .comm-app-reaction-active {
+    background-color: rgba(var(--primary-color-rgb), 0.1);
+    color: var(--primary-color);
+  }
+
+  /* Message options dropdown */
+  .comm-app-message-options {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+  }
+
+  .comm-app-message-content:hover .comm-app-message-options {
+    opacity: 1;
+  }
+
+  .comm-app-message-options-button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+  }
+
+  .comm-app-message-options-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .comm-app-message-dropdown {
+    position: absolute;
+    top: 1.5rem;
+    right: 0;
+    background-color: var(--light-bg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    min-width: 120px;
+    z-index: 10;
+    animation: scaleIn 0.2s ease;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+  }
+
+  .comm-app-message-dropdown-item {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+  }
+
+  .comm-app-message-dropdown-item:hover {
+    background-color: var(--hover-bg);
+  }
+
+  .comm-app-message-dropdown-item svg {
+    width: 16px;
+    height: 16px;
+    margin-right: 0.5rem;
+  }
+
+  /* Thread reply styling */
+  .comm-app-thread-button {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    transition: color var(--transition-fast);
+  }
+
+  .comm-app-thread-button:hover {
+    color: var(--primary-color);
+  }
+
+  .comm-app-thread-button svg {
+    width: 14px;
+    height: 14px;
+    margin-right: 0.25rem;
+  }
+
+  /* Premium gradient effects for special elements */
+  .comm-app-premium-user .comm-app-message-avatar {
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    position: relative;
+  }
+
+  .comm-app-premium-user .comm-app-message-avatar::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #f59e0b, #ef4444, #8b5cf6, #3b82f6);
+    border-radius: 50%;
+    z-index: -1;
+    animation: borderRotate 4s linear infinite;
+  }
+
+  @keyframes borderRotate {
+    0% {
+      transform: rotate(0deg);
+    }
+
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* System message styling */
+  .comm-app-system-message {
+    text-align: center;
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    background-color: rgba(0, 0, 0, 0.03);
+    border-radius: 999px;
+    animation: fadeIn 0.3s ease;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Performance optimizations */
+  .comm-app-container * {
+    will-change: transform, opacity;
+  }
+}
+
+
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+  .comm-app-container {
+    margin-top: -380px;
+  }
+
+  /* Main content area */
+  .comm-app-content {
+    margin-top: 100px;
+
+  }
+
+}
+
+
+
+
+
+/* Send Button Styling */
+.comm-app-send-button {
+
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  padding: 12px;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.comm-app-send-button:hover {
+  background-color: #357bd8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.comm-app-send-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Make sure the SVG icon is sized correctly */
+.comm-app-send-button svg {
+  width: 24px;
+  height: 24px;
+}

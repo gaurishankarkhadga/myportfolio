@@ -1,0 +1,283 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #181818;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    transition: background-color 0.5s ease;
+  }
+  
+  .login-card {
+    background: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transform: translateY(0);
+    transition: all 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .login-card::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(45deg, #ff3366, #7a52ff);
+    border-radius: 50%;
+    opacity: 0.1;
+    filter: blur(80px);
+    z-index: -1;
+    transition: all 0.6s ease;
+  }
+  
+  .login-card::after {
+    content: '';
+    position: absolute;
+    bottom: -100px;
+    right: -100px;
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(45deg, #00ccff, #7a52ff);
+    border-radius: 50%;
+    opacity: 0.1;
+    filter: blur(80px);
+    z-index: -1;
+    transition: all 0.6s ease;
+  }
+  
+  .login-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+  }
+  
+  .login-card:hover::before {
+    transform: scale(1.2);
+    opacity: 0.15;
+  }
+  
+  .login-card:hover::after {
+    transform: scale(1.2);
+    opacity: 0.15;
+  }
+  
+  .login-header {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .login-title {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.025em;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.7s forwards;
+  }
+  
+  .login-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.7s 0.1s forwards;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .login-input-group {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.7s 0.2s forwards;
+  }
+  
+  .login-input-group:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+  
+  .login-input-wrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .login-input-wrapper:focus-within {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 0 3px rgba(122, 82, 255, 0.2);
+  }
+  
+  .login-input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+    transition: color 0.3s ease;
+  }
+  
+  .login-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .login-input:focus {
+    color: white;
+  }
+  
+  .login-input:focus + .login-input-icon {
+    color: #7a52ff;
+  }
+  
+  .login-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+  
+  .login-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: linear-gradient(90deg, #7a52ff 0%, #ff3366 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.7s 0.4s forwards;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .login-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.7s ease;
+  }
+  
+  .login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(122, 82, 255, 0.4);
+  }
+  
+  .login-button:hover::before {
+    left: 100%;
+  }
+  
+  .login-button:active {
+    transform: translateY(1px);
+  }
+  
+  .login-links {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.7s 0.5s forwards;
+  }
+  
+  .login-signup-link {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.3s ease;
+  }
+  
+  .login-signup-link span {
+    color: #7a52ff;
+    font-weight: 600;
+    transition: color 0.3s ease;
+  }
+  
+  .login-signup-link:hover {
+    color: white;
+  }
+  
+  .login-signup-link:hover span {
+    color: #ff3366;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Toast customization */
+  .Toastify__toast {
+    background-color: rgba(30, 30, 30, 0.9) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 12px !important;
+    color: white !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+  }
+  
+  .Toastify__toast-body {
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .Toastify__progress-bar {
+    background: linear-gradient(90deg, #7a52ff, #ff3366) !important;
+  }
+  
+  /* Media queries for responsiveness */
+  @media (max-width: 480px) {
+    .login-card {
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 90%;
+    }
+    
+    .login-title {
+      font-size: 2rem;
+    }
+    
+    .login-container {
+      width: 100%;
+    }
+  }
+  
+  
+  .avatarusericon {
+    font-size: 30px;
+  }
