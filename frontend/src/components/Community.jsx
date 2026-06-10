@@ -6,8 +6,8 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import './Community.css';
 
-// API URL - Loaded from environment variables with local fallback
-const API_URL = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// API URL - Loaded from environment variables with production fallback
+const API_URL = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || 'https://gaurishankarportfolio.onrender.com';
 
 console.log('API URL:', API_URL);
 const Community = () => {

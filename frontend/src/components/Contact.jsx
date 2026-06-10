@@ -11,6 +11,8 @@ const Contact = () => {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,9 +23,11 @@ const Contact = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
     
     try {
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://gaurishankarportfolio.onrender.com';
       const response = await fetch(`${backendUrl}/api/contact`, {
         method: 'POST',
         headers: {
@@ -32,10 +36,11 @@ const Contact = () => {
         body: JSON.stringify(formData)
       });
       
-      const data = await response.json();
+      const data = await response.json().catch(() => ({ success: false, error: 'Failed to parse response from server.' }));
       
-      if (data.success) {
+      if (response.ok && data.success) {
         setSubmitted(true);
+        setError(null);
         
         setTimeout(() => {
           setFormData({
@@ -46,14 +51,16 @@ const Contact = () => {
             message: ''
           });
           setSubmitted(false);
-        }, 3000);
+        }, 5000);
       } else {
         console.error('Form submission error:', data.error);
-        alert('Failed to submit form. Please try again.');
+        setError(data.error || 'Failed to submit form. Please verify your inputs.');
       }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('An error occurred. Please try again later.');
+    } catch (err) {
+      console.error('Error submitting form:', err);
+      setError('A connection error occurred. Please try again later.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -149,6 +156,11 @@ const Contact = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="contact-form">
+              {error && (
+                <div className="error-message" style={{ color: '#ff4d4d', marginBottom: '1.5rem', padding: '0.75rem', borderRadius: '6px', background: 'rgba(255, 77, 77, 0.1)', border: '1px solid rgba(255, 77, 77, 0.2)', fontSize: '0.9rem', textAlign: 'center' }}>
+                  {error}
+                </div>
+              )}
               <div className="form-group">
                 <label htmlFor="name">Name</label>
                 <div className="input-container">
@@ -197,6 +209,7 @@ const Contact = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
+                    required
                     placeholder="Your phone number"
                   />
                 </div>
@@ -238,9 +251,9 @@ const Contact = () => {
                 </div>
               </div>
 
-              <button type="submit" className="submit-btn">
-                <span>Send Message</span>
-                <svg className="send-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <button type="submit" className="submit-btn" disabled={loading}>
+                <span>{loading ? 'Sending...' : 'Send Message'}</span>
+                <svg className="send-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style={{ transform: loading ? 'rotate(360deg)' : 'none', transition: 'transform 0.5s' }}>
                   <path d="M2.01 21L23 12L2.01 3L2 10L17 12L2 14L2.01 21Z" />
                 </svg>
               </button>

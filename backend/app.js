@@ -8,6 +8,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const jwt = require('jsonwebtoken');
 const { router: authRoutes, protect, User, Message } = require('./routes/auth');
+const axios = require('axios');
 
 // Load environment variables
 dotenv.config();
@@ -73,46 +74,117 @@ const Contact = mongoose.model('Contact', contactSchema);
 const emailUser = (process.env.EMAIL_USER || '').trim().replace(/^["']|["']$/g, '');
 const emailPass = (process.env.EMAIL_PASS || '').trim().replace(/^["']|["']$/g, '');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: emailUser,
-    pass: emailPass
-  }
-});
-
-// Function to send email notification
-const sendEmailNotification = async (contactData) => {
-  try {
-    if (!emailUser || !emailPass) {
-      console.warn('Skipping email notification: EMAIL_USER or EMAIL_PASS not configured.');
-      return false;
+let transporter = null;
+if (emailUser && emailPass) {
+  transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    family: 4, // Force IPv4 to prevent ETIMEDOUT on environments like Render that don't support IPv6 routing
+    auth: {
+      user: emailUser,
+      pass: emailPass
     }
+  });
+}
 
-    const mailOptions = {
-      from: emailUser,
-      to: emailUser,
-      subject: `New Contact Form Submitted: ${contactData.subject}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${contactData.name}</p>
-        <p><strong>Email:</strong> ${contactData.email}</p>
-        <p><strong>Phone:</strong> ${contactData.phone}</p>
-        <p><strong>Subject:</strong> ${contactData.subject}</p>
-        <p><strong>Message:</strong></p>
-        <p>${contactData.message}</p>
-        <p><strong>Submitted at:</strong> ${new Date(contactData.createdAt).toLocaleString()}</p>
-      `
-    };
+// Function to send email / Discord notification
+const sendEmailNotification = async (contactData) => {
+  const resendApiKey = (process.env.RESEND_API_KEY || '').trim().replace(/^["']|["']$/g, '');
+  const discordWebhook = (process.env.DISCORD_WEBHOOK_URL || '').trim().replace(/^["']|["']$/g, '');
 
-    
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email notification sent:', info.messageId);
-    return true;
-  } catch (error) {
-    console.error('Failed to send email notification:', error);
-    return false;
+  let sentSuccessful = false;
+
+  // 1. Try sending via Discord Webhook if configured (Bypasses SMTP port blocking completely)
+  if (discordWebhook) {
+    try {
+      console.log('Attempting to send notification via Discord Webhook...');
+      await axios.post(discordWebhook, {
+        embeds: [{
+          title: `📩 New Contact Form Submission`,
+          color: 3447003, // Blue-ish
+          fields: [
+            { name: '👤 Name', value: contactData.name || 'N/A', inline: true },
+            { name: '📧 Email', value: contactData.email || 'N/A', inline: true },
+            { name: '📞 Phone', value: contactData.phone || 'N/A', inline: true },
+            { name: '📝 Subject', value: contactData.subject || 'N/A' },
+            { name: '💬 Message', value: contactData.message || 'N/A' }
+          ],
+          timestamp: new Date(contactData.createdAt || Date.now()).toISOString()
+        }]
+      });
+      console.log('Discord notification sent successfully.');
+      sentSuccessful = true;
+    } catch (error) {
+      console.error('Failed to send Discord notification:', error.message);
+    }
   }
+
+  // 2. Try sending via Resend API if configured (Bypasses SMTP port blocking completely)
+  if (resendApiKey) {
+    try {
+      console.log('Attempting to send email via Resend HTTP API...');
+      const targetEmail = emailUser || 'ggs699000@gmail.com';
+      await axios.post('https://api.resend.com/emails', {
+        from: 'onboarding@resend.dev',
+        to: targetEmail,
+        subject: `New Contact Form Submitted: ${contactData.subject}`,
+        html: `
+          <h2>New Contact Form Submission</h2>
+          <p><strong>Name:</strong> ${contactData.name}</p>
+          <p><strong>Email:</strong> ${contactData.email}</p>
+          <p><strong>Phone:</strong> ${contactData.phone}</p>
+          <p><strong>Subject:</strong> ${contactData.subject}</p>
+          <p><strong>Message:</strong></p>
+          <p>${contactData.message}</p>
+          <p><strong>Submitted at:</strong> ${new Date(contactData.createdAt || Date.now()).toLocaleString()}</p>
+        `
+      }, {
+        headers: {
+          'Authorization': `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log('Email sent successfully via Resend API.');
+      sentSuccessful = true;
+    } catch (error) {
+      console.error('Failed to send email via Resend API:', error.response?.data || error.message);
+    }
+  }
+
+  // 3. Fallback to standard Nodemailer SMTP (Works locally, but typically fails/times out on Render Free tier due to port blocks)
+  if (!sentSuccessful && transporter) {
+    try {
+      console.log('Attempting to send email via Nodemailer SMTP...');
+      const mailOptions = {
+        from: emailUser,
+        to: emailUser,
+        subject: `New Contact Form Submitted: ${contactData.subject}`,
+        html: `
+          <h2>New Contact Form Submission</h2>
+          <p><strong>Name:</strong> ${contactData.name}</p>
+          <p><strong>Email:</strong> ${contactData.email}</p>
+          <p><strong>Phone:</strong> ${contactData.phone}</p>
+          <p><strong>Subject:</strong> ${contactData.subject}</p>
+          <p><strong>Message:</strong></p>
+          <p>${contactData.message}</p>
+          <p><strong>Submitted at:</strong> ${new Date(contactData.createdAt || Date.now()).toLocaleString()}</p>
+        `
+      };
+      
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Email notification sent via SMTP:', info.messageId);
+      sentSuccessful = true;
+    } catch (error) {
+      console.error('Failed to send email notification via SMTP:', error);
+    }
+  }
+
+  if (!sentSuccessful) {
+    console.error('All notification services failed or were not configured.');
+  }
+
+  return sentSuccessful;
 };
 
 

@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-// API URL - Loaded from environment variables with local fallback
-const API_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000';
+// API URL - Loaded from environment variables with production fallback
+const API_URL = import.meta.env.VITE_BACKEND_URL || 'https://gaurishankarportfolio.onrender.com';
 
 const AuthContext = createContext();
 
