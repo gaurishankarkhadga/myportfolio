@@ -1,23 +1,22 @@
 const axios = require('axios');
 
-// Create an authentication service object instead of React context
 const authService = (() => {
   let user = null;
   let token = null;
   
-  // Load token from environment or configuration
+  
   try {
     token = process.env.AUTH_TOKEN;
   } catch (error) {
     console.log('No token found in environment');
   }
   
-  // Set up axios interceptor for authentication
+  
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
   
-  // Initialize user data if token exists
+  
   const initialize = async () => {
     if (token) {
       try {
@@ -46,7 +45,7 @@ const authService = (() => {
       token = newToken;
       user = userData;
       
-      // Set token in axios defaults
+      
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
       return userData;
@@ -66,7 +65,7 @@ const authService = (() => {
       token = newToken;
       user = userData;
       
-      // Set token in axios defaults
+      
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
       return userData;

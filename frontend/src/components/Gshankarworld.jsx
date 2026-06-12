@@ -6,7 +6,6 @@ export const Gshankarworld = ({ onReturn }) => {
     <div className="gshankar-world">
       <div className="digital-grid"></div>
       
-      {/* Floating elements for visual effect */}
       {Array.from({ length: 15 }).map((_, i) => (
         <div 
           key={i}
@@ -23,7 +22,6 @@ export const Gshankarworld = ({ onReturn }) => {
         />
       ))}
       
-      {/* Main content */}
       <div className="gshankar-content">
         <h1 className="gshankar-title">GAURISHANKAR WORLD</h1>
       

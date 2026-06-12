@@ -6,7 +6,6 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import './Community.css';
 
-// API URL - Loaded from environment variables with production fallback
 const API_URL = import.meta.env.VITE_BACKEND_URL || import.meta.env.VITE_API_URL || 'https://gaurishankarportfolio.onrender.com';
 
 console.log('API URL:', API_URL);
@@ -21,11 +20,11 @@ const Community = () => {
   const messagesContainerRef = useRef(null);
   const socketRef = useRef(null);
 
-  // Initialize socket connection and fetch messages when component mounts
+  
   useEffect(() => {
-    // Don't modify body overflow - removed that code to maintain consistency with main layout
     
-    // First, fetch messages directly using REST API
+    
+    
     if (user && token) {
       fetchMessages();
       setupSocketConnection();
@@ -38,17 +37,17 @@ const Community = () => {
     };
   }, [user, token]);
 
-  // Set up socket connection
+  
   const setupSocketConnection = () => {
-    // Create socket instance
+    
     const socket = io(API_URL, {
-      transports: ['websocket', 'polling'], // Try websocket first, fallback to polling
-      auth: { token } // Send token directly in connection options
+      transports: ['websocket', 'polling'], 
+      auth: { token } 
     });
     
     socketRef.current = socket;
 
-    // Socket event handlers
+    
     socket.on('connect', () => {
       console.log('Socket connected');
     });
@@ -60,7 +59,7 @@ const Community = () => {
     socket.on('new_message', (message) => {
       console.log('New message received:', message);
       setMessages(prevMessages => [...prevMessages, message]);
-      // Use a small delay to ensure the DOM has updated
+      
       setTimeout(scrollToBottom, 10);
     });
 
@@ -68,7 +67,7 @@ const Community = () => {
       setActiveUsers(users);
     });
     
-    // Explicitly authenticate after connection
+    
     socket.on('connect', () => {
       if (token) {
         socket.emit('authenticate', token);
@@ -81,13 +80,13 @@ const Community = () => {
     });
   };
 
-  // Fetch messages from API using Axios
+  
   const fetchMessages = async () => {
     try {
       setLoading(true);
       setError(null);
       
-      // Ensure token is properly formatted in the Authorization header
+      
       const response = await axios.get(`${API_URL}/api/messages`, {
         headers: { 
           'Authorization': `Bearer ${token}`,
@@ -97,47 +96,47 @@ const Community = () => {
       
       setMessages(response.data);
       
-      // Scroll to bottom after messages load
+      
       setTimeout(scrollToBottom, 100);
     } catch (err) {
       console.error('Failed to fetch messages:', err);
       setError('Failed to load messages. Please try again.');
       
-      // Initialize with empty array to allow messaging even if history load fails
+      
       setMessages([]);
     } finally {
       setLoading(false);
     }
   };
 
-  // Scroll to bottom of messages
+  
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  // Handle form submission - try both socket and direct API methods
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!newMessage.trim()) return;
     
     try {
-      // First try with socket if available
+      
       if (socketRef.current && socketRef.current.connected) {
         console.log('Sending message via socket');
         socketRef.current.emit('send_message', { content: newMessage.trim() });
       } else {
-        // Fallback to direct API call
+        
         console.log('Socket not available, sending via API');
         await sendMessageViaAPI(newMessage.trim());
       }
       
-      // Clear input field regardless of method used
+      
       setNewMessage('');
       
-      // Force scroll to bottom after sending
+      
       setTimeout(scrollToBottom, 10);
     } catch (err) {
       console.error('Failed to send message:', err);
@@ -145,7 +144,7 @@ const Community = () => {
     }
   };
 
-  // Direct API method as backup
+  
   const sendMessageViaAPI = async (content) => {
     const response = await axios.post(
       `${API_URL}/api/messages`, 
@@ -158,14 +157,14 @@ const Community = () => {
       }
     );
     
-    // Add new message to the list immediately
+    
     const newMsg = response.data;
     setMessages(prevMessages => [...prevMessages, newMsg]);
     
     return newMsg;
   };
 
-  // If user is not logged in
+  
   if (!user) {
     return (
       <div className="comm-app-container" id="community">

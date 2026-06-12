@@ -5,6 +5,7 @@ import "./App.css";
 import myimage from './components/myimage.png';
 import Home from "./components/Home";
 import About from "./components/About";
+import Education from "./components/Education";
 import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
@@ -15,31 +16,22 @@ import Login from "./components/auth/Login";
 import Community from "./components/Community";
 import NotFound from "./components/NotFound";
 import Register from "./components/auth/Register";
+import SplashCursor from "./components/SplashCursor";
 
-
-
-
-
-
-
-
-
-// Protected route component that checks authentication
 const ProtectedRoute = ({ element }) => {
   const { user } = useAuth();
   
   return user ? element : <Navigate to="/login" />;
 };
 
-const sections = ["home", "about", "skill", "projects", "contact"];
+const sections = ["home", "about", "education", "skill", "projects", "contact"];
 
-// The main content component that handles scrolling and animations
 const MainContent = () => {
   const location = useLocation();
 
   useEffect(() => {
 
-    // Intersection Observer for section visibility
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
@@ -53,14 +45,14 @@ const MainContent = () => {
       }
     );
 
-    // Observe sections after DOM load
+    
     const observeTimer = setTimeout(() => {
       document.querySelectorAll('section').forEach(section => {
         observer.observe(section);
       });
     }, 1000);
 
-    // Scroll to appropriate section when route changes
+    
     if (location.hash) {
       const id = location.hash.substring(1);
       const element = document.getElementById(id);
@@ -70,7 +62,7 @@ const MainContent = () => {
         }, 100);
       }
     } else if (location.pathname === '/' || sections.includes(location.pathname.substring(1))) {
-      // If we have a route like /about, scroll to that section
+      
       const path = location.pathname === '/' ? 'home' : location.pathname.substring(1);
       const element = document.getElementById(path);
       if (element) {
@@ -87,22 +79,22 @@ const MainContent = () => {
   }, [sections, location]);
 
   const handleScrollButton = () => {
-    // Get current scroll position
-    const currentPosition = window.scrollY + 50; // Add small offset
     
-    // Find the next section
+    const currentPosition = window.scrollY + 50; 
+    
+    
     for (let i = 0; i < sections.length; i++) {
       const element = document.getElementById(sections[i]);
       if (element && element.offsetTop > currentPosition) {
-        // Found next section, scroll to it
+        
         element.scrollIntoView({ behavior: 'smooth' });
         return;
       }
     }
     
-    // If we get here, we didn't find a next section,
-    // which means we're at or near the bottom,
-    // so scroll to home section
+    
+    
+    
     const homeSection = document.getElementById('home');
     if (homeSection) {
       homeSection.scrollIntoView({ behavior: 'smooth' });
@@ -119,6 +111,7 @@ const MainContent = () => {
           {[
             { id: "home", Component: Home },
             { id: "about", Component: About },
+            { id: "education", Component: Education },
             { id: "skill", Component: Skills },
             { id: "projects", Component: Projects },
             { id: "contact", Component: Contact },
@@ -129,7 +122,6 @@ const MainContent = () => {
           ))}
         </main>
         
-        {/* Single scroll button */}
         <button 
           className="scroll-button" 
           onClick={handleScrollButton}
@@ -141,7 +133,6 @@ const MainContent = () => {
   );
 };
 
-// Layout component that includes Navbar for all pages
 const Layout = ({ children }) => {
   return (
     <>
@@ -151,25 +142,23 @@ const Layout = ({ children }) => {
   );
 };
 
-// Routes configuration for the app
 const App = () => {
   return (
     <AuthProvider>
       <Router>
+        <SplashCursor />
         <Routes>
-          {/* Main content routes with Layout */}
           <Route path="/" element={<Layout><MainContent /></Layout>} />
           <Route path="/home" element={<Layout><MainContent /></Layout>} />
           <Route path="/about" element={<Layout><MainContent /></Layout>} />
+          <Route path="/education" element={<Layout><MainContent /></Layout>} />
           <Route path="/skill" element={<Layout><MainContent /></Layout>} />
           <Route path="/projects" element={<Layout><MainContent /></Layout>} />
           <Route path="/contact" element={<Layout><MainContent /></Layout>} />
           
-          {/* Auth routes without the full Layout */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           
-          {/* Community route with Layout */}
           <Route 
             path="/community" 
             element={

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Skills.css';
 
-// Import your SVG icons
 import cicd from './svgicons/ci-cd-svgrepo-com.svg';
 import css3 from './svgicons/css-3-svgrepo-com.svg';
 import docker from './svgicons/docker-svgrepo-com.svg';
@@ -25,20 +24,18 @@ const Skills = () => {
   const skillCardsRef = useRef([]);
   const containerRef = useRef(null);
 
-  // Map skill names to their corresponding icons
+  
   const skillIconMap = {
     'React': react,
     'JavaScript': javascript,
     'HTML': html5,
     'CSS': css3,
-    'Next.js': nextjs,
     'PHP': php,
     'Node.js': nodejs,
     'JAVA': java,
     'Python': python,
     'MongoDB': mongodb,
     'SQL': mysql,
-    'Docker': docker,
     'CI/CD': cicd,
     'AWS': aws,
     'Git': git,
@@ -47,24 +44,23 @@ const Skills = () => {
 
   const skillsData = {
     frontend: [
-      { name: 'React', level: 90, description: 'Building complex UI components & state management' },
-      { name: 'JavaScript', level: 85, description: 'Modern ES6+, async/await, functional programming' },
+      { name: 'React', level: 70, description: 'Building complex UI components & state management' },
+      { name: 'JavaScript', level: 80, description: 'Modern ES6+, async/await, functional programming' },
       { name: 'HTML', level: 95, description: 'Semantic markup' },
       { name: 'CSS', level: 90, description: 'Flexbox/Grid, animations' },
-      { name: 'Next.js', level: 85, description: 'Server-side rendering, API routes, static generation' },
-      { name: 'PHP', level: 70, description: 'Legacy support and CMS development' },
+      { name: 'PHP', level: 50, description: 'Legacy support and CMS development' },
     ],
     backend: [
-      { name: 'Node.js', level: 85, description: 'RESTful APIs, middleware, authentication' },
-      { name: 'JAVA', level: 85, description: 'Enterprise applications, microservices' },
-      { name: 'Python', level: 75, description: 'Data processing, automation, scripting' },
-      { name: 'MongoDB', level: 80, description: 'Schema design, aggregation framework' },
+
+      { name: 'Node.js', level: 70, description: 'RESTful APIs, middleware, authentication' },
+      { name: 'JAVA', level: 60, description: 'Enterprise applications, microservices' },
+      { name: 'Python', level: 50, description: 'Data processing, automation, scripting' },
+      { name: 'MongoDB', level: 60, description: 'Schema design, aggregation framework' },
       { name: 'SQL', level: 75, description: 'Complex queries, database optimization' }
     ],
     devops: [
-      { name: 'Docker', level: 80, description: 'Containerization, multi-container applications' },
       { name: 'CI/CD', level: 75, description: 'Automated testing, deployment pipelines' },
-      { name: 'AWS', level: 70, description: 'S3, EC2, Lambda, CloudFront, Route53' },
+      { name: 'AWS', level: 10, description: 'EC2, S3' },
       { name: 'Git', level: 90, description: 'Advanced branching strategies, workflow automation' },
       { name: 'Linux', level: 85, description: 'Server configuration, shell scripting' }
     ]
@@ -91,7 +87,7 @@ const Skills = () => {
   }, []);
 
   useEffect(() => {
-    // Set up the observer for the cards container
+    
     const observeCards = () => {
       if (!containerRef.current) return;
       
@@ -104,15 +100,15 @@ const Skills = () => {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            // Trigger animation for all cards when container is visible
+            
             const cards = containerRef.current.querySelectorAll('.skill-card');
             cards.forEach((card, index) => {
               setTimeout(() => {
                 card.classList.add('animate-in');
-              }, index * 120); // Staggered delay
+              }, index * 120); 
             });
           } else {
-            // Reset animations when container is out of view
+            
             const cards = containerRef.current.querySelectorAll('.skill-card');
             cards.forEach(card => {
               card.classList.remove('animate-in');
@@ -138,14 +134,14 @@ const Skills = () => {
   const handleCategoryChange = (category) => {
     setActiveCategory(category);
     
-    // Reset animations when changing categories
+    
     if (containerRef.current) {
       const cards = containerRef.current.querySelectorAll('.skill-card');
       cards.forEach(card => {
         card.classList.remove('animate-in');
       });
       
-      // Add a small delay before triggering new category animations
+      
       setTimeout(() => {
         const newCards = containerRef.current.querySelectorAll('.skill-card');
         newCards.forEach((card, index) => {

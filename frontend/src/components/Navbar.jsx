@@ -2,17 +2,16 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import "./Navbar.css";
-// Import Material UI components
+
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-// Import Lucide icons
-import { Home, User, Briefcase, Code, Mail, Users } from "lucide-react";
-// Add animation keyframes
+
+import { Home, User, Briefcase, Code, Mail, Users, GraduationCap } from "lucide-react";
+
 import { keyframes } from "@emotion/react";
 import { styled } from "@mui/material/styles";
 
-// Create enhanced animated components
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -104,6 +103,15 @@ const Navbar = () => {
   const clickScrollTimeout = useRef(null);
   const containerRef = useRef(null);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
+  const [isNavbarExpanded, setIsNavbarExpanded] = useState(false);
+
+  useEffect(() => {
+    
+    const timer = setTimeout(() => {
+      setIsNavbarExpanded(true);
+    }, 3300);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const updateIndicator = () => {
@@ -122,7 +130,7 @@ const Navbar = () => {
 
     updateIndicator();
     
-    // Multiple timeouts to handle initial loading layout shifts
+    
     const timer1 = setTimeout(updateIndicator, 100);
     const timer2 = setTimeout(updateIndicator, 500);
     const timer3 = setTimeout(updateIndicator, 1500);
@@ -139,7 +147,7 @@ const Navbar = () => {
   }, [activeItem]);
 
   useEffect(() => {
-    // Set active item based on current path
+    
     const path = location.pathname.substring(1) || 'home';
     if (path === 'community' || menuItems.some(item => item.id === path)) {
       setActiveItem(path);
@@ -147,17 +155,17 @@ const Navbar = () => {
   }, [location.pathname]);
 
   useEffect(() => {
-    // Scroll spy logic: observe sections to update active nav link on scroll
-    const sectionPagePaths = ["/", "/home", "/about", "/skill", "/projects", "/contact"];
+    
+    const sectionPagePaths = ["/", "/home", "/about", "/education", "/skill", "/projects", "/contact"];
     if (!sectionPagePaths.includes(location.pathname)) {
       return;
     }
 
-    const sectionsToObserve = ["home", "about", "skill", "projects", "contact"];
+    const sectionsToObserve = ["home", "about", "education", "skill", "projects", "contact"];
     
     const observerOptions = {
       root: null,
-      // Focus on the top-to-middle portion of the viewport for active selection
+      
       rootMargin: "-25% 0px -55% 0px",
       threshold: 0,
     };
@@ -170,7 +178,7 @@ const Navbar = () => {
           const id = entry.target.id;
           setActiveItem(id);
           
-          // Sync browser address bar with current active section without triggering react router reload
+          
           const path = id === "home" ? "/" : `/${id}`;
           if (window.location.pathname !== path) {
             window.history.replaceState(null, "", path);
@@ -210,7 +218,7 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Clean up timeouts on unmount
+  
   useEffect(() => {
     return () => {
       if (clickScrollTimeout.current) {
@@ -231,14 +239,14 @@ const Navbar = () => {
     setActiveItem(id);
     closeMenu();
     
-    // Check if this is the community item and user is not logged in
+    
     if (id === "community" && !user) {
-      // Navigate to login
+      
       navigate("/login");
       return false;
     }
 
-    // Set temporary ignore flag to avoid scroll spy updating active state during smooth scroll transition
+    
     isClickScrolling.current = true;
     if (clickScrollTimeout.current) {
       clearTimeout(clickScrollTimeout.current);
@@ -250,10 +258,11 @@ const Navbar = () => {
     return true;
   };
 
-  // Updated menu items array with paths
+  
   const menuItems = [
     { path: "/", label: "Home", icon: Home, id: "home" },
     { path: "/about", label: "About", icon: User, id: "about" },
+    { path: "/education", label: "Education", icon: GraduationCap, id: "education" },
     { path: "/skill", label: "Skills", icon: Code, id: "skill" },
     { path: "/projects", label: "Projects", icon: Briefcase, id: "projects" },
     { path: "/contact", label: "Contact", icon: Mail, id: "contact" },
@@ -262,7 +271,7 @@ const Navbar = () => {
 
   const visibleMenuItems = menuItems.filter(item => item.id !== "community");
 
-  // Enhanced drawer content with staggered animations
+  
   const drawerContent = (
     <List sx={{ padding: "10px 0", paddingTop: "20px" }}>
       {visibleMenuItems.map((item, index) => {
@@ -338,35 +347,51 @@ const Navbar = () => {
           </button>
         )}
 
-        {/* Desktop menu - now using Link components */}
         {!isMobile && (
           <div className="menu-items" ref={containerRef}>
-            {/* Smooth sliding indicator bar */}
             <div 
               className="nav-indicator" 
               style={{
                 position: "absolute",
                 left: `${indicatorStyle.left}px`,
                 width: `${indicatorStyle.width}px`,
-                opacity: indicatorStyle.opacity,
-                height: "3px",
-                bottom: "0",
-                transition: "left 0.35s cubic-bezier(0.25, 1, 0.5, 1), width 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease",
+                opacity: isNavbarExpanded ? indicatorStyle.opacity : 0,
+                height: "32px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                transition: "left 0.35s cubic-bezier(0.25, 1, 0.5, 1), width 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s ease",
                 pointerEvents: "none",
                 zIndex: 1,
                 display: "flex",
+                alignItems: "center",
                 justifyContent: "center"
               }}
             >
               <div 
                 style={{
-                  width: "60%",
+                  width: "100%",
                   height: "100%",
-                  background: "linear-gradient(90deg, #3bf680, #00f3ff)",
-                  boxShadow: "0 0 10px rgba(59, 246, 128, 0.8), 0 0 20px rgba(0, 243, 255, 0.4)",
-                  borderRadius: "3px"
+                  background: "linear-gradient(135deg, rgba(0, 243, 255, 0.12), rgba(59, 246, 128, 0.12))",
+                  border: "1px solid rgba(0, 243, 255, 0.35)",
+                  boxShadow: "0 0 15px rgba(0, 243, 255, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15)",
+                  borderRadius: "30px",
+                  position: "relative"
                 }}
-              />
+              >
+                <div 
+                  style={{
+                    position: "absolute",
+                    bottom: "-5px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "40%",
+                    height: "2px",
+                    background: "linear-gradient(90deg, #3bf680, #00f3ff)",
+                    boxShadow: "0 0 8px rgba(0, 243, 255, 0.8), 0 0 15px rgba(59, 246, 128, 0.6)",
+                    borderRadius: "2px"
+                  }}
+                />
+              </div>
             </div>
             {visibleMenuItems.map((item, index) => (
               <Link
@@ -385,7 +410,6 @@ const Navbar = () => {
           </div>
         )}
 
-        {/* Enhanced mobile drawer with animations */}
         {isMobile && (
           <Drawer
             anchor="left"

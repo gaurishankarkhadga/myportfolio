@@ -243,7 +243,7 @@
     }
   }
   
-  /* Toast customization */
+  
   .Toastify__toast {
     background-color: rgba(30, 30, 30, 0.9) !important;
     backdrop-filter: blur(10px);
@@ -260,7 +260,7 @@
     background: linear-gradient(90deg, #7a52ff, #ff3366) !important;
   }
   
-  /* Media queries for responsiveness */
+  
   @media (max-width: 480px) {
     .login-card {
       padding: 2rem;

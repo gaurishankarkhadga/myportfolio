@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Github, ExternalLink, Star, ChevronDown } from 'lucide-react';
 import './Projects.css';
 
-// Import project images (kept the same as your original)
 import myfirst from './myfirst.png';
 import youtube from './youtube.png';
 import gshankarai from './chatai.png';
@@ -21,7 +20,7 @@ const Projects = () => {
   const sectionRef = useRef(null);
   const cardRefs = useRef({});
 
-  // Project data (kept the same as your original)
+  
   const projects = [
     {
       id: 1,
@@ -132,7 +131,7 @@ const Projects = () => {
     { name: "NPM Packages", value: "package" }
   ];
 
-  // Setup Intersection Observer for section
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -160,7 +159,7 @@ const Projects = () => {
     };
   }, []);
 
-  // Setup individual Intersection Observers for each card
+  
   useEffect(() => {
     const observerOptions = {
       threshold: 0.2,
@@ -177,7 +176,7 @@ const Projects = () => {
       });
     }, observerOptions);
 
-    // Observe all card elements
+    
     Object.values(cardRefs.current).forEach(ref => {
       if (ref) {
         cardObserver.observe(ref);
@@ -185,7 +184,7 @@ const Projects = () => {
     });
 
     return () => {
-      // Cleanup observers
+      
       Object.values(cardRefs.current).forEach(ref => {
         if (ref) {
           cardObserver.unobserve(ref);
@@ -194,8 +193,7 @@ const Projects = () => {
     };
   }, [filteredProjects, visibleCount]);
 
-
-  // Filter projects when category changes
+  
   useEffect(() => {
     if (activeFilter === 'all') {
       setFilteredProjects(projects);
@@ -205,7 +203,7 @@ const Projects = () => {
     setVisibleCount(6);
   }, [activeFilter]);
 
-  // Handle mouse tracking for hover effects
+  
   useEffect(() => {
     const handleMouseMove = (e) => {
       const cards = document.querySelectorAll('.project-card');
@@ -236,7 +234,6 @@ const Projects = () => {
            <div className="contact-header">
               <h1>MY PROJECTS</h1>
             </div>
-          {/* <div className="heading-underline"></div> */}
           <p className="projects-subheading">
             Explore my portfolio of innovative solutions across different technologies
           </p>
@@ -317,7 +314,6 @@ const Projects = () => {
             ))}
           </div>
           
-          {/* Load More Button */}
           {filteredProjects.length > visibleCount && (
             <div className="load-more-container">
               <button 

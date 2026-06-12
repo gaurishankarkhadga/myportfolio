@@ -295,7 +295,6 @@
   }
 }
 
-/* Media queries for responsiveness */
 @media (max-width: 480px) {
   .auth-register-card {
     padding: 2rem;

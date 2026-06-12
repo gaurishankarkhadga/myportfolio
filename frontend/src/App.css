@@ -1,7 +1,5 @@
-/* App.css */
 
 
-/* Base styles and variables */
 :root {
   --primary-color: #6e00ff;
   --secondary-color: #ff00c3;
@@ -23,7 +21,6 @@ button:focus-visible {
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
 }
 
-
 * {
   margin: 0;
   padding: 0;
@@ -36,8 +33,6 @@ button:focus-visible {
   --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -45,15 +40,6 @@ button:focus-visible {
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
 }
-
-
-
-
-
-
-
-
-
 
 html {
   scroll-behavior: smooth;
@@ -70,7 +56,6 @@ body {
   min-height: 100vh;
 }
 
-
 ::-webkit-scrollbar {
   width: 8px;
   background: #181818;
@@ -81,16 +66,6 @@ body {
   border-radius: 4px;
 }
 
-
-
-
-
-
-
-
-
-
-/* Core Layout */
 .app-container {
   width: 100vw;
   min-height: 100vh;
@@ -123,15 +98,12 @@ section {
   align-items: center;
 }
 
-
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .main-content {
     margin-top: 80px;
@@ -154,10 +126,6 @@ section {
   }
 }
 
-
-
-
-/* Scroll Button Styles */
 .scroll-button {
   position: fixed;
   bottom: 30px;

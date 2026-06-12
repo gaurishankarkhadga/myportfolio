@@ -1,5 +1,5 @@
-/* Modern Community Chat Styling */
-/* Reset and base styles */
+
+
 :root {
   --primary-color: #181818;
   --primary-light: #181818;
@@ -31,7 +31,6 @@
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
-/* Apply base styles to the container */
 .comm-app-container {
   font-family: var(--font-sans);
   color: var(--text-primary);
@@ -47,7 +46,6 @@
   margin-top: -365px;
 }
 
-/* Header styling with gradient background */
 .comm-app-header {
   background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
   color: white;
@@ -78,12 +76,11 @@
   font-weight: 400;
 }
 
-/* Main content area */
 .comm-app-content {
   display: flex;
   flex: 1;
   margin: 1.5rem;
-  /* background-color: var(--light-bg); */
+  
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
@@ -93,7 +90,6 @@
   margin-top: 100px;
 }
 
-/* Sidebar styling */
 .comm-app-sidebar {
   width: var(--sidebar-width);
   background-color: #fcfcfd;
@@ -124,7 +120,6 @@
   color: var(--primary-color);
 }
 
-/* Users list */
 .comm-app-users-list {
   flex: 1;
   overflow-y: auto;
@@ -211,7 +206,6 @@
   font-size: 0.9rem;
 }
 
-/* Chat area styling */
 .comm-app-chat {
   flex: 1;
   display: flex;
@@ -221,7 +215,6 @@
   overflow: hidden;
 }
 
-/* Error message styling */
 .comm-app-error {
   background-color: rgba(239, 68, 68, 0.1);
   color: var(--danger);
@@ -251,7 +244,6 @@
   opacity: 1;
 }
 
-/* Messages container */
 .comm-app-messages {
   flex: 1;
   overflow-y: auto;
@@ -274,7 +266,6 @@
   border-radius: 20px;
 }
 
-/* Loading state */
 .comm-app-loading {
   display: flex;
   align-items: center;
@@ -296,7 +287,6 @@
   animation: spin 0.8s linear infinite;
 }
 
-/* Empty messages state */
 .comm-app-no-messages {
   display: flex;
   flex-direction: column;
@@ -320,7 +310,6 @@
   line-height: 1.5;
 }
 
-/* Message styling */
 .comm-app-message {
   display: flex;
   margin-bottom: 1.5rem;
@@ -414,7 +403,6 @@
   color: white;
 }
 
-/* Message form */
 .comm-app-message-form {
   display: flex;
   padding: 1rem 1.5rem;
@@ -476,7 +464,6 @@
   transform: translateX(1px);
 }
 
-/* Auth required screen */
 .comm-app-auth-required {
   display: flex;
   flex-direction: column;
@@ -553,7 +540,6 @@
   box-shadow: 0 6px 12px -4px rgba(0, 0, 0, 0.1);
 }
 
-/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -584,7 +570,6 @@
   }
 }
 
-/* Media queries for responsive design */
 @media (max-width: 992px) {
   .comm-app-content {
     margin: 1rem;
@@ -686,7 +671,6 @@
   }
 }
 
-/* Dark mode support */
 @media (prefers-color-scheme: dark) {
   :root {
     --light-bg: #1f2937;
@@ -768,22 +752,22 @@
     color: var(--text-primary);
   }
 
-  /* Additional theme enhancements */
+  
   .comm-app-message-input:focus {
     border-color: var(--primary-dark);
     box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.3);
   }
 
-  /* Custom scrollbar for dark mode */
+  
   .comm-app-messages::-webkit-scrollbar-thumb,
   .comm-app-users-list::-webkit-scrollbar-thumb {
     background-color: #4b5563;
   }
 
-  /* End of dark mode support */
+  
 
-  /* Additional modern enhancements */
-  /* Message bubbles with gradients */
+  
+  
   .comm-app-message-content {
     position: relative;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -798,13 +782,13 @@
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   }
 
-  /* Glass morphism effect on some elements */
+  
   .comm-app-header {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
   }
 
-  /* Pulse animation for the user status */
+  
   .comm-app-user-status {
     animation: pulse 2s infinite;
   }
@@ -823,7 +807,7 @@
     }
   }
 
-  /* Enhanced typing animation */
+  
   .comm-app-typing {
     display: flex;
     align-items: center;
@@ -873,7 +857,7 @@
     }
   }
 
-  /* Enhanced user interactions */
+  
   .comm-app-user-item {
     position: relative;
     overflow: hidden;
@@ -899,7 +883,7 @@
     transform: scale(1);
   }
 
-  /* Enhanced buttons */
+  
   .comm-app-send-button {
     position: relative;
     overflow: hidden;
@@ -925,12 +909,12 @@
     transition: transform 0s ease, opacity 0.2s ease;
   }
 
-  /* Enhanced message transitions */
+  
   .comm-app-message {
     transition: all 0.3s ease;
   }
 
-  /* Modern popup animations */
+  
   @keyframes scaleIn {
     from {
       opacity: 0;
@@ -943,7 +927,7 @@
     }
   }
 
-  /* Enhanced hover effects for buttons */
+  
   .comm-app-login-btn,
   .comm-app-register-btn {
     position: relative;
@@ -972,7 +956,7 @@
     transform-origin: left;
   }
 
-  /* Elegant scrollbar for modern browsers */
+  
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -991,7 +975,7 @@
     background-color: var(--text-secondary);
   }
 
-  /* Loading skeleton animation for messages while loading */
+  
   .comm-app-skeleton {
     background: linear-gradient(90deg,
         var(--card-bg) 25%,
@@ -1014,7 +998,7 @@
     }
   }
 
-  /* Emoji picker enhancements */
+  
   .comm-app-emoji-button {
     background: none;
     border: none;
@@ -1071,7 +1055,7 @@
     transform: scale(1.2);
   }
 
-  /* File attachment styling */
+  
   .comm-app-attachment-button {
     background: none;
     border: none;
@@ -1125,7 +1109,7 @@
     opacity: 1;
   }
 
-  /* Message reactions */
+  
   .comm-app-reactions {
     display: flex;
     flex-wrap: wrap;
@@ -1158,7 +1142,7 @@
     color: var(--primary-color);
   }
 
-  /* Message options dropdown */
+  
   .comm-app-message-options {
     position: absolute;
     top: 0.5rem;
@@ -1221,7 +1205,7 @@
     margin-right: 0.5rem;
   }
 
-  /* Thread reply styling */
+  
   .comm-app-thread-button {
     font-size: 0.75rem;
     color: var(--text-secondary);
@@ -1245,7 +1229,7 @@
     margin-right: 0.25rem;
   }
 
-  /* Premium gradient effects for special elements */
+  
   .comm-app-premium-user .comm-app-message-avatar {
     border: 2px solid transparent;
     background-clip: padding-box;
@@ -1275,7 +1259,7 @@
     }
   }
 
-  /* System message styling */
+  
   .comm-app-system-message {
     text-align: center;
     margin: 1rem 0;
@@ -1290,26 +1274,18 @@
     margin-right: auto;
   }
 
-  /* Performance optimizations */
+  
   .comm-app-container * {
     will-change: transform, opacity;
   }
 }
-
-
-
-
-
-
-
-
 
 @media (max-width: 768px) {
   .comm-app-container {
     margin-top: -380px;
   }
 
-  /* Main content area */
+  
   .comm-app-content {
     margin-top: 100px;
 
@@ -1317,11 +1293,6 @@
 
 }
 
-
-
-
-
-/* Send Button Styling */
 .comm-app-send-button {
 
   width: 48px;
@@ -1345,7 +1316,6 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Make sure the SVG icon is sized correctly */
 .comm-app-send-button svg {
   width: 24px;
   height: 24px;

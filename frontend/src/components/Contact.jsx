@@ -1,7 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Contact.css'; 
 
 const Contact = () => {
+  const containerRef = useRef(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.05,
+      rootMargin: '0px'
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsInView(entry.isIntersecting);
+    }, observerOptions);
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -67,7 +89,7 @@ const Contact = () => {
   
 
   return (
-    <div className="contact-container">
+    <div className={`contact-container ${isInView ? 'in-view' : ''}`} ref={containerRef}>
       <div className="contact-header">
         <h1>Get In Touch</h1>
         <p>Have a project in mind or want to collaborate? Feel free to reach out and I'll get back to you as soon as possible.</p>

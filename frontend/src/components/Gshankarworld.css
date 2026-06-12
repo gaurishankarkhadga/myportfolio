@@ -101,7 +101,7 @@
     box-shadow: 0 0 15px rgba(255, 0, 170, 0.7);
   }
   
-  /* Add this to your existing CSS if not already there */
+  
   .dimension-fade-out {
     opacity: 0;
     pointer-events: none;

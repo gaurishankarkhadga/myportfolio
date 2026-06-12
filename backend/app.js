@@ -10,10 +10,8 @@ const jwt = require('jsonwebtoken');
 const { router: authRoutes, protect, User, Message } = require('./routes/auth');
 const axios = require('axios');
 
-// Load environment variables
 dotenv.config();
 
-// Initialize Express app
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
@@ -25,17 +23,14 @@ const io = socketIo(server, {
 
 const PORT = process.env.PORT || 8000;
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 
-// MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Contact Schema
 const contactSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -67,10 +62,8 @@ const contactSchema = new mongoose.Schema({
   }
 });
 
-// Contact Model
 const Contact = mongoose.model('Contact', contactSchema);
 
-// Configure Nodemailer with environment variable sanitization (removes accidental quotes/whitespace)
 const emailUser = (process.env.EMAIL_USER || '').trim().replace(/^["']|["']$/g, '');
 const emailPass = (process.env.EMAIL_PASS || '').trim().replace(/^["']|["']$/g, '');
 
@@ -125,7 +118,7 @@ const sendEmailNotification = async (contactData) => {
     try {
       console.log('Attempting to send email via Resend HTTP API...');
       const targetEmail = emailUser || 'ggs699000@gmail.com';
-      await axios.post('https://api.resend.com/emails', {
+      await axios.post('https:
         from: 'onboarding@resend.dev',
         to: targetEmail,
         subject: `New Contact Form Submitted: ${contactData.subject}`,
@@ -152,7 +145,7 @@ const sendEmailNotification = async (contactData) => {
     }
   }
 
-  // 3. Fallback to standard Nodemailer SMTP (Works locally, but typically fails/times out on Render Free tier due to port blocks)
+  
   if (!sentSuccessful && transporter) {
     try {
       console.log('Attempting to send email via Nodemailer SMTP...');
@@ -187,32 +180,29 @@ const sendEmailNotification = async (contactData) => {
   return sentSuccessful;
 };
 
-
-
-// Custom middleware for token verification
 const verifyToken = async (req, res, next) => {
   try {
     let token;
 
-    // Check for token in headers
+    
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
-      // Get token from header
+      
       token = req.headers.authorization.split(' ')[1];
       console.log("Token received:", token ? `${token.substring(0, 10)}...` : "Invalid token");
     }
 
-    // Make sure token exists
+    
     if (!token) {
       console.log("No token provided in Authorization header");
       return res.status(401).json({ message: 'Not authorized, no token' });
     }
 
     try {
-      // Verify token
+      
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       console.log("Token verified for user ID:", decoded.id);
 
-      // Get user from the token
+      
       const user = await User.findById(decoded.id).select('-password');
 
       if (!user) {
@@ -220,10 +210,10 @@ const verifyToken = async (req, res, next) => {
         return res.status(401).json({ message: 'Not authorized, user not found' });
       }
 
-      // Update user's last active timestamp
+      
       await User.findByIdAndUpdate(user._id, { lastActiveAt: Date.now() });
 
-      // Add user to request object
+      
       req.user = user;
       next();
     } catch (error) {
@@ -236,24 +226,13 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-
-// Socket authentication handler
 const authenticateSocket = async (socket, token) => {
   try {
     if (!token) {
       throw new Error('No token provided');
     }
 
-    // Clean the token if needed (remove quotes, trim whitespace)
+    
     const cleanToken = token.replace(/^["']|["']$/g, '').trim();
 
     // Verify JWT token
@@ -273,12 +252,11 @@ const authenticateSocket = async (socket, token) => {
   }
 };
 
-// Updated Socket connection handler
 io.on('connection', async (socket) => {
   console.log('New client connected:', socket.id);
   let authenticatedUser = null;
 
-  // Check if token was provided in the connection auth
+  
   if (socket.handshake.auth && socket.handshake.auth.token) {
     try {
       const token = socket.handshake.auth.token;
@@ -290,14 +268,14 @@ io.on('connection', async (socket) => {
         socket.userId = authenticatedUser._id;
         console.log(`Socket ${socket.id} authenticated as user ${authenticatedUser.username}`);
 
-        // Join authenticated room
+        
         socket.join('authenticated');
 
-        // Send active users list to the newly authenticated user
+        
         const activeUsers = await getActiveUsers();
         socket.emit('active_users', activeUsers);
 
-        // Broadcast to all other users that a new user is online
+        
         socket.to('authenticated').emit('active_users', activeUsers);
       }
     } catch (error) {
@@ -305,26 +283,26 @@ io.on('connection', async (socket) => {
     }
   }
 
-  // Traditional authenticate event (as backup)
+  
   socket.on('authenticate', async (token) => {
     try {
       authenticatedUser = await authenticateSocket(socket, token);
 
-      // Store user ID in socket object
+      
       socket.userId = authenticatedUser._id;
       console.log(`Socket ${socket.id} authenticated via event as user ${authenticatedUser.username}`);
 
-      // Join a room for all authenticated users
+      
       socket.join('authenticated');
 
-      // Send active users list to the newly authenticated user
+      
       const activeUsers = await getActiveUsers();
       socket.emit('active_users', activeUsers);
 
-      // Let user know they're authenticated
+      
       socket.emit('authenticated', { success: true });
 
-      // Broadcast to all other users that a new user is online
+      
       socket.to('authenticated').emit('active_users', activeUsers);
 
     } catch (error) {
@@ -333,16 +311,9 @@ io.on('connection', async (socket) => {
     }
   });
 
-  // Rest of socket event handlers...
+  
 });
 
-
-
-
-
-
-
-// Helper function to get active users
 async function getActiveUsers() {
   try {
     const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
@@ -359,20 +330,19 @@ async function getActiveUsers() {
   }
 }
 
-// Setup Socket Handlers
 const setupSocketHandlers = (io) => {
-  // Socket.io connection setup
+  
   io.on('connection', async (socket) => {
     console.log('New client connected:', socket.id);
     let authenticatedUser = null;
 
-    // Check if token was provided in the connection auth
+    
     if (socket.handshake.auth && socket.handshake.auth.token) {
       try {
         const token = socket.handshake.auth.token;
         console.log("Socket auth token received from connection params");
 
-        // Verify JWT token
+        
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         authenticatedUser = await User.findById(decoded.id).select('-password');
 
@@ -380,17 +350,17 @@ const setupSocketHandlers = (io) => {
           socket.userId = authenticatedUser._id;
           console.log(`Socket ${socket.id} authenticated as user ${authenticatedUser.username}`);
 
-          // Update user's last active timestamp
+          
           await User.findByIdAndUpdate(authenticatedUser._id, { lastActiveAt: Date.now() });
 
-          // Join authenticated room
+          
           socket.join('authenticated');
 
-          // Send active users list to the newly authenticated user
+          
           const activeUsers = await getActiveUsers();
           socket.emit('active_users', activeUsers);
 
-          // Broadcast to all other users that a new user is online
+          
           socket.to('authenticated').emit('active_users', activeUsers);
         }
       } catch (error) {
@@ -398,7 +368,7 @@ const setupSocketHandlers = (io) => {
       }
     }
 
-    // Traditional authenticate event (as backup)
+    
     socket.on('authenticate', async (token) => {
       try {
         if (!token) {
@@ -409,7 +379,7 @@ const setupSocketHandlers = (io) => {
 
         console.log("Socket auth token received from event");
 
-        // Verify JWT token
+        
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         authenticatedUser = await User.findById(decoded.id).select('-password');
 
@@ -419,24 +389,24 @@ const setupSocketHandlers = (io) => {
           return;
         }
 
-        // Store user ID in socket object
+        
         socket.userId = authenticatedUser._id;
         console.log(`Socket ${socket.id} authenticated via event as user ${authenticatedUser.username}`);
 
-        // Update user's last active timestamp
+        
         await User.findByIdAndUpdate(authenticatedUser._id, { lastActiveAt: Date.now() });
 
-        // Join a room for all authenticated users
+        
         socket.join('authenticated');
 
-        // Send active users list to the newly authenticated user
+        
         const activeUsers = await getActiveUsers();
         socket.emit('active_users', activeUsers);
 
-        // Let user know they're authenticated
+        
         socket.emit('authenticated', { success: true });
 
-        // Broadcast to all other users that a new user is online
+        
         socket.to('authenticated').emit('active_users', activeUsers);
 
       } catch (error) {
@@ -445,7 +415,7 @@ const setupSocketHandlers = (io) => {
       }
     });
 
-    // Handle new messages - with extra error handling
+    
     socket.on('send_message', async (messageData) => {
       try {
         if (!socket.userId) {
@@ -454,7 +424,7 @@ const setupSocketHandlers = (io) => {
           return;
         }
 
-        // Basic validation
+        
         if (!messageData || !messageData.content || !messageData.content.trim()) {
           socket.emit('message_error', 'Message content is required');
           return;
@@ -462,7 +432,7 @@ const setupSocketHandlers = (io) => {
 
         console.log(`Received message from user ${socket.userId}: ${messageData.content}`);
 
-        // Create and save message to database
+        
         const newMessage = new Message({
           content: messageData.content.trim(),
           user: socket.userId
@@ -471,10 +441,10 @@ const setupSocketHandlers = (io) => {
         const savedMessage = await newMessage.save();
         console.log(`Message saved with ID: ${savedMessage._id}`);
 
-        // Populate user data before broadcasting
+        
         await savedMessage.populate('user', 'username avatar _id');
 
-        // Broadcast to all authenticated users including sender
+        
         io.to('authenticated').emit('new_message', savedMessage);
 
       } catch (error) {
@@ -483,13 +453,13 @@ const setupSocketHandlers = (io) => {
       }
     });
 
-    // Handle disconnection
+    
     socket.on('disconnect', async () => {
       console.log('Client disconnected:', socket.id);
 
-      // If user was authenticated, update active users
+      
       if (socket.userId) {
-        // Wait a moment before updating active users to avoid frequent updates
+        
         setTimeout(async () => {
           const activeUsers = await getActiveUsers();
           io.to('authenticated').emit('active_users', activeUsers);
@@ -499,19 +469,15 @@ const setupSocketHandlers = (io) => {
   });
 };
 
-// Initialize socket handlers
 setupSocketHandlers(io);
 
-// Routes
 app.use('/api/auth', authRoutes);
 
-// NEW MESSAGE API ENDPOINTS
-// Get messages
 app.get('/api/messages', verifyToken, async (req, res) => {
   try {
     console.log(`Fetching messages for user: ${req.user.username}`);
 
-    // Get the last 50 messages, sorted by creation date
+    
     const messages = await Message.find()
       .populate('user', 'username avatar _id')
       .sort({ createdAt: -1 })
@@ -519,7 +485,7 @@ app.get('/api/messages', verifyToken, async (req, res) => {
 
     console.log(`Found ${messages.length} messages`);
 
-    // Return in chronological order (oldest first)
+    
     res.status(200).json(messages.reverse());
   } catch (error) {
     console.error('Error fetching messages:', error);
@@ -527,7 +493,6 @@ app.get('/api/messages', verifyToken, async (req, res) => {
   }
 });
 
-// Create a new message
 app.post('/api/messages', verifyToken, async (req, res) => {
   try {
     const { content } = req.body;
@@ -535,28 +500,28 @@ app.post('/api/messages', verifyToken, async (req, res) => {
     console.log(`Message creation attempt by user: ${req.user.username}`);
     console.log(`Message content: ${content}`);
 
-    // Validate required fields
+    
     if (!content || !content.trim()) {
       return res.status(400).json({ success: false, error: 'Message content is required' });
     }
 
-    // Create new message
+    
     const newMessage = new Message({
       content: content.trim(),
       user: req.user._id
     });
 
-    // Save to database
+    
     const savedMessage = await newMessage.save();
     console.log(`Message saved with ID: ${savedMessage._id}`);
 
-    // Populate user info before returning
+    
     await savedMessage.populate('user', 'username avatar _id');
 
-    // Broadcast to all connected clients via socket.io
+    
     io.to('authenticated').emit('new_message', savedMessage);
 
-    // Send success response
+    
     res.status(201).json(savedMessage);
   } catch (error) {
     console.error('Error creating message:', error);
@@ -571,12 +536,12 @@ app.post('/api/contact', async (req, res) => {
   try {
     const { name, phone, email, subject, message } = req.body;
 
-    // Validate required fields
+    
     if (!name || !phone || !email || !subject || !message) {
       return res.status(400).json({ success: false, error: 'All fields are required' });
     }
 
-    // Create new contact entry
+    
     const newContact = new Contact({
       name,
       email,
@@ -585,10 +550,10 @@ app.post('/api/contact', async (req, res) => {
       message
     });
 
-    // Save to database
+    
     await newContact.save();
 
-    // Send email notification
+    
     const emailSent = await sendEmailNotification(newContact);
 
     if (!emailSent) {
@@ -598,7 +563,7 @@ app.post('/api/contact', async (req, res) => {
       });
     }
 
-    // Send success response
+    
     res.status(201).json({
       success: true,
       message: 'Your message has been received. We will get back to you soon.',
@@ -613,7 +578,6 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
-// Get all contacts (admin endpoint, should be protected in production)
 app.get('/api/contacts', verifyToken, async (req, res) => {
   try {
     const contacts = await Contact.find().sort({ createdAt: -1 });
@@ -624,15 +588,12 @@ app.get('/api/contacts', verifyToken, async (req, res) => {
   }
 });
 
-// Health check endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'Server is running' });
 });
 
-// Start server with socket.io support
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT} with WebSocket support`);
 });
 
-// Export for testing or if using this file as a module
 module.exports = { app, server, io };

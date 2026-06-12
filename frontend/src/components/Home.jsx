@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './Home.css';
-// import myimage from './mrx.jpg';
+
 import myimage from './leftview.jpg';
 
 import github from './socialsvg/github-142-svgrepo-com.svg'
@@ -10,11 +10,15 @@ import instagram from './socialsvg/instagram-1-svgrepo-com.svg'
 import leetcode from './socialsvg/leetcode.svg'
 
 const Home = () => {
-  const [isLoaded, setIsLoaded] = useState(true); // Set to true by default to avoid delay
+  const containerRef = useRef(null);
+  const [isInView, setIsInView] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(() => {
+    return !sessionStorage.getItem('home_page_loaded');
+  });
   const [currentTitleIndex, setCurrentTitleIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [typingSpeed, setTypingSpeed] = useState(50); // Faster typing speed
+  const [typingSpeed, setTypingSpeed] = useState(50); 
 
   const titles = [
     "MR GAURI SHANKAR",
@@ -24,13 +28,13 @@ const Home = () => {
   ];
 
   useEffect(() => {
-    // Typing animation with optimized performance
+    
     const typingAnimation = () => {
       const currentTitle = titles[currentTitleIndex];
 
       if (isDeleting) {
         setDisplayText(currentTitle.substring(0, displayText.length - 1));
-        setTypingSpeed(30); // Even faster deleting
+        setTypingSpeed(30); 
 
         if (displayText === '') {
           setIsDeleting(false);
@@ -42,7 +46,7 @@ const Home = () => {
         setDisplayText(currentTitle.substring(0, displayText.length + 1));
 
         if (displayText === currentTitle) {
-          setTypingSpeed(1000); // Shorter pause before deleting
+          setTypingSpeed(1000); 
           setIsDeleting(true);
         }
       }
@@ -53,44 +57,46 @@ const Home = () => {
   }, [displayText, isDeleting, currentTitleIndex, typingSpeed, titles]);
 
   useEffect(() => {
-    // Optimized intersection observer with higher threshold for smoother appearance
+    let initialTimer;
+    if (isInitialLoad) {
+      initialTimer = setTimeout(() => {
+        setIsInitialLoad(false);
+        sessionStorage.setItem('home_page_loaded', 'true');
+      }, 5000);
+    }
+
+    
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('show');
-          }
-        });
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
       },
       {
-        threshold: 0.2, // Higher threshold for smoother transitions
-        rootMargin: '0px', // Simplified margin
+        threshold: 0.05,
+        rootMargin: '0px',
       }
     );
 
-    document.querySelectorAll('.animated').forEach((el) => {
-      observer.observe(el);
-      // Add show class immediately to avoid initial delay
-      el.classList.add('show');
-    });
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
 
-    // Simplified parallax with requestAnimationFrame for better performance
+    
     const handleParallax = (e) => {
       const circles = document.querySelectorAll('.glowing-circle');
-      const moveX = (e.clientX - window.innerWidth / 2) / 100; // Reduced movement for smoother effect
+      const moveX = (e.clientX - window.innerWidth / 2) / 100; 
       const moveY = (e.clientY - window.innerHeight / 2) / 100;
 
       circles.forEach((circle, index) => {
-        const depth = (index + 1) * 0.3; // Reduced depth for smoother movement
+        const depth = (index + 1) * 0.3; 
         circle.style.transform = `translate(${moveX * depth}px, ${moveY * depth}px)`;
       });
     };
 
-    // More efficient event handling using throttling for parallax
+    
     let lastMove = 0;
     const throttledParallax = (e) => {
       const now = Date.now();
-      if (now - lastMove > 16) { // Limit to ~60fps
+      if (now - lastMove > 16) { 
         handleParallax(e);
         lastMove = now;
       }
@@ -99,15 +105,14 @@ const Home = () => {
     document.addEventListener('mousemove', throttledParallax);
 
     return () => {
-      document.querySelectorAll('.animated').forEach((el) => {
-        observer.unobserve(el);
-      });
+      if (initialTimer) clearTimeout(initialTimer);
+      observer.disconnect();
       document.removeEventListener('mousemove', throttledParallax);
     };
-  }, []);
+  }, [isInitialLoad]);
 
   return (
-    <div className="home">
+    <div className={`home ${isInView ? 'in-view' : ''} ${isInitialLoad ? 'is-initial-load' : ''}`} ref={containerRef}>
       <div className="noise-overlay"></div>
 
       <div className="container">
@@ -116,12 +121,11 @@ const Home = () => {
         <div className="glowing-circle circle-3"></div>
 
         <header className="hero-header">
-          {/* Enhanced header content */}
         </header>
 
         <div className="content-wrapper">
           <div className="hero-content">
-            <div className="animated title-container show">
+            <div className="animated title-container">
               <h1 className="main-title">
                 <div className="typing-wrapper">
                   <span className="iam">I AM, </span>
@@ -133,7 +137,7 @@ const Home = () => {
               </h1>
             </div>
 
-            <div className="animated info-box show">
+            <div className="animated info-box">
               <div className="info-content">
                 <p className="specialization">FRONTEND • BACKEND • DEVOPS</p>
                 <div className="separator"></div>
@@ -143,9 +147,8 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="animated cta-container show">
-              {/* Social Media Links with Tooltips */}
-              <div className="animated social-links-container show">
+            <div className="animated cta-container">
+              <div className="animated social-links-container">
                 <div className="social-link-wrapper">
                   <a href="https://github.com/mr-gaurishankar-khadga" target="_blank" rel="noopener noreferrer" className="social-link github">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white">
@@ -204,7 +207,7 @@ const Home = () => {
           </div>
 
           <div className="hero-visual">
-            <div className="animated image-container show">
+            <div className="animated image-container">
               <div className="image-placeholder">
                 <img src={myimage} alt="Profile" />
               </div>

@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
-// User Schema
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -43,7 +42,6 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// Hash password before saving
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
   
@@ -56,15 +54,12 @@ userSchema.pre('save', async function(next) {
   }
 });
 
-// Method to check password
 userSchema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// User Model
 const User = mongoose.model('User', userSchema);
 
-// Message Schema
 const messageSchema = new mongoose.Schema({
   content: {
     type: String,
@@ -82,25 +77,23 @@ const messageSchema = new mongoose.Schema({
   }
 });
 
-// Message Model
 const Message = mongoose.model('Message', messageSchema);
 
-// Authentication middleware
 const protect = async (req, res, next) => {
   let token;
   
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
-      // Get token from header
+      
       token = req.headers.authorization.split(' ')[1];
       
-      // Verify token
+      
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       
-      // Get user from the token
+      
       req.user = await User.findById(decoded.id).select('-password');
       
-      // Update last active timestamp
+      
       await User.findByIdAndUpdate(req.user._id, { lastActiveAt: Date.now() });
       
       next();
@@ -121,23 +114,17 @@ const protect = async (req, res, next) => {
   }
 };
 
-// Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d'
   });
 };
 
-// Routes
-
-// @desc    Register new user
-// @route   POST /api/auth/register
-// @access  Public
 router.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
     
-    // Check if user exists
+    
     const userExists = await User.findOne({ email });
     
     if (userExists) {
@@ -147,7 +134,7 @@ router.post('/register', async (req, res) => {
       });
     }
     
-    // Check if username is taken
+    
     const usernameTaken = await User.findOne({ username });
     
     if (usernameTaken) {
@@ -157,7 +144,7 @@ router.post('/register', async (req, res) => {
       });
     }
     
-    // Create user
+    
     const user = await User.create({
       username,
       email,
@@ -191,14 +178,11 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// @desc    Login user
-// @route   POST /api/auth/login
-// @access  Public
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     
-    // Check for user email
+    
     const user = await User.findOne({ email });
     
     if (!user) {
@@ -208,7 +192,7 @@ router.post('/login', async (req, res) => {
       });
     }
     
-    // Check if password matches
+    
     const isMatch = await user.matchPassword(password);
     
     if (!isMatch) {
@@ -218,7 +202,7 @@ router.post('/login', async (req, res) => {
       });
     }
     
-    // Update last active timestamp
+    
     user.lastActiveAt = Date.now();
     await user.save();
     
@@ -242,9 +226,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// @desc    Get user profile
-// @route   GET /api/auth/me
-// @access  Private
 router.get('/me', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('-password');
@@ -273,9 +254,6 @@ router.get('/me', protect, async (req, res) => {
   }
 });
 
-// @desc    Update user profile
-// @route   PATCH /api/auth/me
-// @access  Private
 router.patch('/me', protect, async (req, res) => {
   try {
     const { username, email, avatar } = req.body;
@@ -290,7 +268,7 @@ router.patch('/me', protect, async (req, res) => {
       });
     }
     
-    // Check if username change and if it's taken
+    
     if (username && username !== user.username) {
       const usernameTaken = await User.findOne({ username, _id: { $ne: userId } });
       
@@ -304,7 +282,7 @@ router.patch('/me', protect, async (req, res) => {
       user.username = username;
     }
     
-    // Check if email change and if it's taken
+    
     if (email && email !== user.email) {
       const emailTaken = await User.findOne({ email, _id: { $ne: userId } });
       
@@ -318,12 +296,12 @@ router.patch('/me', protect, async (req, res) => {
       user.email = email;
     }
     
-    // Update avatar if provided
+    
     if (avatar) {
       user.avatar = avatar;
     }
     
-    // Save updated user
+    
     const updatedUser = await user.save();
     
     res.status(200).json({
@@ -343,17 +321,14 @@ router.patch('/me', protect, async (req, res) => {
   }
 });
 
-// @desc    Get active users
-// @route   GET /api/users/active
-// @access  Private
 router.get('/users/active', protect, async (req, res) => {
   try {
-    // Get users active in the last 15 minutes
+    
     const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
     
     const activeUsers = await User.find({
       lastActiveAt: { $gte: fifteenMinutesAgo },
-      _id: { $ne: req.user._id } // Exclude current user
+      _id: { $ne: req.user._id } 
     }).select('username avatar lastActiveAt');
     
     res.status(200).json(activeUsers);
@@ -366,9 +341,6 @@ router.get('/users/active', protect, async (req, res) => {
   }
 });
 
-// @desc    Get all messages
-// @route   GET /api/messages
-// @access  Private
 router.get('/messages', protect, async (req, res) => {
   try {
     const messages = await Message.find()
@@ -385,9 +357,6 @@ router.get('/messages', protect, async (req, res) => {
   }
 });
 
-// @desc    Create new message
-// @route   POST /api/messages
-// @access  Private
 router.post('/messages', protect, async (req, res) => {
   try {
     const { content } = req.body;
@@ -406,7 +375,7 @@ router.post('/messages', protect, async (req, res) => {
     
     const savedMessage = await message.save();
     
-    // Populate user data before returning
+    
     await savedMessage.populate('user', 'username avatar _id');
     
     res.status(201).json(savedMessage);
