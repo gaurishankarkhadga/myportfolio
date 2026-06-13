@@ -31,7 +31,7 @@ const Projects = () => {
       technologies: ["React", "OpenAI API", "Node.js", "Express", "MongoDB"],
       image: gshankarai,
       liveLink: "https://mrchatai.netlify.app",
-      codeLink: "https://github.com/settings/profile"
+      codeLink: "https://github.com/gaurishankarkhadga"
     },
     {
       id: 2,
@@ -42,7 +42,7 @@ const Projects = () => {
       technologies: ["HTML", "CSS", "JavaScript", "Bootstrap"],
       image: myfirst,
       liveLink: "https://gshankarfirstsite.netlify.app",
-      codeLink: "https://github.com/settings/profile"
+      codeLink: "https://github.com/gaurishankarkhadga"
     },
     {
       id: 3,
@@ -53,7 +53,7 @@ const Projects = () => {
       technologies: ["React", "Node.js", "MongoDB", "Express", "Chart.js"],
       image: business,
       liveLink: "https://mr-gaurishankar-khadga.github.io/mybusiness",
-      codeLink: "https://github.com/settings/profile"
+      codeLink: "https://github.com/gaurishankarkhadga"
     },
     {
       id: 4,
@@ -64,7 +64,7 @@ const Projects = () => {
       technologies: ["React", "Node.js", "Express", "MongoDB", "Stripe API"],
       image: ecommerce,
       liveLink: "https://wenli.in",
-      codeLink: "https://github.com/settings/profile"
+      codeLink: "https://github.com/gaurishankarkhadga"
     },
     {
       id: 5,
@@ -75,7 +75,7 @@ const Projects = () => {
       technologies: ["React", "Firebase", "Redux", "Material UI"],
       image: youtube,
       liveLink: "https://youtubelookslike.netlify.app",
-      codeLink: "https://github.com/settings/profile"
+      codeLink: "https://github.com/gaurishankarkhadga"
     },
     {
       id: 6,
@@ -86,7 +86,7 @@ const Projects = () => {
       technologies: ["JavaScript", "Chrome API", "CSS"],
       image: adBlocker,
       liveLink: "#",
-      codeLink: "https://github.com/settings/profile"
+      codeLink: "https://github.com/gaurishankarkhadga"
     },
     {
       id: 7,
@@ -97,7 +97,7 @@ const Projects = () => {
       technologies: ["JavaScript", "Node.js", "NPM"],
       image: mstar,
       liveLink: "https://www.npmjs.com/package/mstar",
-      codeLink: "https://github.com/settings/profile"
+      codeLink: "https://github.com/gaurishankarkhadga"
     },
     {
       id: 8,
@@ -108,7 +108,7 @@ const Projects = () => {
       technologies: ["JavaScript", "Node.js", "NPM", "CLI"],
       image: gsharpi,
       liveLink: "https://www.npmjs.com/package/gsharpi",
-      codeLink: "https://github.com/settings/profile"
+      codeLink: "https://github.com/gaurishankarkhadga"
     },
     {
       id: 9,
@@ -119,7 +119,7 @@ const Projects = () => {
       technologies: ["JavaScript", "Node.js", "NPM"],
       image: quickx,
       liveLink: "https://www.npmjs.com/package/quickx",
-      codeLink: "https://github.com/settings/profile"
+      codeLink: "https://github.com/gaurishankarkhadga"
     }
   ];
 

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
   --bg-color: #0a0a0a;
@@ -141,40 +142,37 @@
 }
 
 .info-box {
-  background: rgba(17, 17, 17, 0.6);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
+  position: relative;
+  padding: 0;
   width: 95%;
+  background: none;
+  border: none;
+  margin-top: -1.5rem;
 }
 
-.info-box:hover {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 20px rgba(0, 255, 170, 0.2);
-  transform: translateY(-5px);
+.tagline {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+  font-weight: 600;
+  line-height: 1.4;
+  color: #ffffff;
+  letter-spacing: -0.02em;
 }
 
-.specialization {
-  font-family: var(--font-mono);
-  font-size: 0.9rem;
-  letter-spacing: 0.1em;
-  color: var(--accent-color);
-  margin-bottom: 0.75rem;
+.sub-tagline {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(0.95rem, 1.7vw, 1.15rem);
+  font-weight: 400;
+  line-height: 1.5;
+  color: #ffffff;
+  margin-top: 0.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-.separator {
-  width: 50px;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent-color), transparent);
-  margin: 0.75rem 0;
-}
-
-.description {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  opacity: 0.9;
+.sub-tagline strong {
+  font-weight: 800;
+  font-size: clamp(1.2rem, 2.1vw, 1.45rem);
 }
 
 .social-links-container {

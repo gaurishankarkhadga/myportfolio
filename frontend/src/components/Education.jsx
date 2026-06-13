@@ -70,7 +70,7 @@ const Education = () => {
       id: 3,
       startYear: "2022",
       endYear: "2022",
-      degree: "Secondary School Education (10th Standard)",
+      degree: "Secondary School Education (SEE)",
       institution: "Shree Narendra Memorial Higher Secondary School",
       department: "Boriya, Saptari - Nepal",
       status: "Completed",
