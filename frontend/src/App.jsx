@@ -10,7 +10,7 @@ import Skills from "./components/Skills";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import NetworkBackground from "./components/NetworkBackground";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { ArrowUp, ArrowDown } from "lucide-react";
 import { AuthProvider, useAuth } from "./components/context/AuthContext";
 import Login from "./components/auth/Login";
 import Community from "./components/Community";
@@ -78,26 +78,81 @@ const MainContent = () => {
     };
   }, [sections, location]);
 
+  const [isAtBottom, setIsAtBottom] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const contactSection = document.getElementById('contact');
+      if (contactSection) {
+        // If user scrolls past the top of the contact section (minus a offset margin)
+        const isAtContact = window.scrollY >= contactSection.offsetTop - 200;
+        setIsAtBottom(isAtContact);
+      } else {
+        const isBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
+        setIsAtBottom(isBottom);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const smoothScrollTo = (targetElement, duration = 1200) => {
+    // Temporarily disable CSS smooth scroll to prevent buffering/conflicts with JS loop
+    document.documentElement.style.scrollBehavior = 'auto';
+
+    const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+    const startPosition = window.scrollY;
+    const distance = targetPosition - startPosition;
+    let startTime = null;
+
+    const easeInOutCubic = (t) => {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    };
+
+    const animation = (currentTime) => {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / duration, 1);
+      const ease = easeInOutCubic(progress);
+      
+      window.scrollTo(0, startPosition + distance * ease);
+
+      if (timeElapsed < duration) {
+        requestAnimationFrame(animation);
+      } else {
+        // Restore CSS smooth scroll once finished
+        document.documentElement.style.scrollBehavior = 'smooth';
+      }
+    };
+
+    requestAnimationFrame(animation);
+  };
+
   const handleScrollButton = () => {
-    
+    if (isAtBottom) {
+      const homeSection = document.getElementById('home');
+      if (homeSection) {
+        smoothScrollTo(homeSection, 1500);
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return;
+    }
+
     const currentPosition = window.scrollY + 50; 
-    
-    
     for (let i = 0; i < sections.length; i++) {
       const element = document.getElementById(sections[i]);
       if (element && element.offsetTop > currentPosition) {
-        
-        element.scrollIntoView({ behavior: 'smooth' });
+        smoothScrollTo(element, 1200);
         return;
       }
     }
-    
-    
-    
-    
+
     const homeSection = document.getElementById('home');
     if (homeSection) {
-      homeSection.scrollIntoView({ behavior: 'smooth' });
+      smoothScrollTo(homeSection, 1500);
     }
   };
 
@@ -126,7 +181,7 @@ const MainContent = () => {
           className="scroll-button" 
           onClick={handleScrollButton}
         >
-          <ChevronDown size={24} />
+          {isAtBottom ? <ArrowUp size={24} /> : <ArrowDown size={24} />}
         </button>
       </div>
     </>

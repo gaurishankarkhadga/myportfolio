@@ -283,6 +283,9 @@ const Contact = () => {
           )}
         </div>
       </div>
+      <footer className="footer-copyright">
+        <p>Powered By <br className="mobile-break" />MR GAURI SHANKAR KHADGA</p>
+      </footer>
     </div>
   );
 };

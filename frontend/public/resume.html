@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gauri Shankar Khadga - Resume</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* Reset & Page Setup */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: #f3f4f6;
+      color: #1f2937;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 0;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Floating Controls for Screen View */
+    .no-print {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 25px;
+      width: 100%;
+      max-width: 210mm;
+      justify-content: flex-end;
+      padding: 0 10px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      border: 1px solid #d1d5db;
+      background-color: #ffffff;
+      color: #374151;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      background-color: #f9fafb;
+      border-color: #9ca3af;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background-color: #111827;
+      color: #ffffff;
+      border: 1px solid #111827;
+    }
+
+    .btn-primary:hover {
+      background-color: #1f2937;
+    }
+
+    /* A4 Resume Sheet */
+    .resume-sheet {
+      background-color: #ffffff;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 15mm 15mm 12mm 15mm;
+      /* Optimized margins to fit content on one line */
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    /* Header Styling */
+    .resume-header {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .resume-header h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24pt;
+      font-weight: 700;
+      color: #000000;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .resume-header .tagline {
+      font-size: 10.5pt;
+      color: #4b5563;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+      font-weight: 400;
+    }
+
+    .resume-header .contact-info {
+      font-size: 8.2pt;
+      /* Slightly optimized font size to prevent line wrapping */
+      color: #6b7280;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      /* Increased gap for better readability */
+      align-items: center;
+    }
+
+    .resume-header .contact-info span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .resume-header .contact-info span:not(:last-child)::after {
+      content: "•";
+      margin-left: 6px;
+      color: #9ca3af;
+      display: inline-block;
+    }
+
+    .resume-header .contact-info a {
+      color: #4b5563;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .contact-icon {
+      width: 10pt;
+      height: 10pt;
+      flex-shrink: 0;
+      fill: currentColor;
+    }
+
+    .resume-header .contact-info a:hover {
+      text-decoration: underline;
+      color: #111827;
+    }
+
+    /* Sections Divider */
+    .section {
+      margin-bottom: 18px;
+      width: 100%;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 12pt;
+      font-weight: 700;
+      text-align: center;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+      color: #000000;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: #111827;
+      margin-top: 5px;
+    }
+
+    /* Summary Section */
+    .summary-text {
+      font-size: 9pt;
+      line-height: 1.45;
+      color: #374151;
+      text-align: justify;
+    }
+
+    /* Skills Section */
+    .skills-text {
+      font-size: 9pt;
+      line-height: 1.5;
+      color: #374151;
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    /* Experience & Projects */
+    .experience-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .experience-item {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .experience-row-1 {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9pt;
+      color: #4b5563;
+      font-weight: 400;
+    }
+
+    .experience-row-2 {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: #000000;
+      margin-top: 1px;
+      margin-bottom: 4px;
+    }
+
+    .experience-bullets {
+      padding-left: 14px;
+      margin: 0;
+    }
+
+    .experience-bullets li {
+      font-size: 8.5pt;
+      line-height: 1.4;
+      color: #374151;
+      margin-bottom: 3px;
+    }
+
+    /* Education Section */
+    .education-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .education-item {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .education-row-1 {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9pt;
+      color: #4b5563;
+    }
+
+    .education-row-2 {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: #000000;
+      margin-top: 1px;
+      margin-bottom: 2px;
+    }
+
+    .education-sub {
+      font-size: 8.5pt;
+      color: #4b5563;
+      font-style: italic;
+    }
+
+    /* Footer Branding */
+    .resume-footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 7.5pt;
+      color: #9ca3af;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 8px;
+    }
+
+    .resume-footer a {
+      color: #9ca3af;
+      text-decoration: none;
+    }
+
+    .resume-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .resume-header .contact-info {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .resume-header .contact-info span:not(:last-child)::after {
+        display: none !important;
+      }
+    }
+
+    /* PDF Print Rules */
+    @page {
+      size: A4;
+      margin: 0;
+      /* Handled by sheet padding */
+    }
+
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .resume-sheet {
+        box-shadow: none !important;
+        width: 100% !important;
+        min-height: 100vh !important;
+        padding: 15mm 15mm 12mm 15mm !important;
+        border: none !important;
+      }
+
+      .resume-footer {
+        position: absolute;
+        bottom: 12mm;
+        left: 15mm;
+        right: 15mm;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Controls Menu -->
+  <div class="no-print">
+    <a href="/" class="btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M19 12H5M12 19l-7-7 7-7" />
+      </svg>
+      Back to Portfolio
+    </a>
+    <button onclick="window.print()" class="btn btn-primary">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path
+          d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2m-12 0v5h12v-5m-12-4h10" />
+      </svg>
+      Print / Save PDF
+    </button>
+  </div>
+
+  <!-- Sheet Canvas -->
+  <div class="resume-sheet">
+
+    <!-- Profile Info Header -->
+    <div class="resume-header">
+      <h1>GAURI SHANKAR KHADGA</h1>
+      <div class="tagline">Full-Stack Developer | Backend Systems | DevOps Enthusiast</div>
+      <div class="contact-info">
+        <span>
+          <a href="tel:+977-9813737842">
+            <svg class="contact-icon" viewBox="0 0 24 24">
+              <path
+                d="M6.62 10.79a15.15 15.15 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.11-.27 11.5 11.5 0 0 0 3.58.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.5 11.5 0 0 0 .57 3.58 1 1 0 0 1-.27 1.11z" />
+            </svg>
+            +977-9813737842
+          </a>
+        </span>
+        <span>
+          <a href="mailto:mrgaurishankarkhadga@gmail.com">
+            <svg class="contact-icon" viewBox="0 0 24 24">
+              <path
+                d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+            </svg>
+            mrgaurishankarkhadga@gmail.com
+          </a>
+        </span>
+        <span>
+          <a href="https://linkedin.com/in/mr-gauri-shankar-khadga" target="_blank">
+            <svg class="contact-icon linkedin-icon" viewBox="0 0 24 24">
+              <path
+                d="M19 0h-14c-2.76 0-5 2.24-5 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5v-14c0-2.76-2.24-5-5-5zm-11.27 20h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+            </svg>
+            linkedin.com
+          </a>
+        </span>
+        <span>
+          <a href="https://github.com/mr-gaurishankar-khadga" target="_blank">
+            <svg class="contact-icon" viewBox="0 0 24 24">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+            </svg>
+            github.com
+          </a>
+        </span>
+        <span>
+          <svg class="contact-icon" viewBox="0 0 24 24">
+            <path
+              d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+          </svg>
+          Vadodara, India
+        </span>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="section">
+      <h2 class="section-title">Summary</h2>
+      <p class="summary-text">
+        Passionate MERN Stack Developer and B.Tech CSE (AIML) student specializing in building scalable web applications, designing robust REST APIs, and automating CI/CD pipelines. Proven problem-solver with 150+ coding challenges completed and multiple open-source NPM utility packages published.
+      </p>
+    </div>
+
+    <!-- Skills -->
+    <div class="section">
+      <h2 class="section-title">Skills</h2>
+      <p class="skills-text">
+        <strong>Languages & Frameworks:</strong> React, JavaScript (ES6+), Node.js, Express, Java, Python, PHP,
+        HTML/CSS, Responsive Web Design<br>
+        <strong>Databases & DevOps:</strong> MongoDB, SQL, Git/GitHub, Linux (Bash Scripting), CI/CD, AWS
+      </p>
+    </div>
+
+    <!-- Experience / Projects -->
+    <div class="section">
+      <h2 class="section-title">Projects & Experience</h2>
+      <div class="experience-list">
+
+        <div class="experience-item">
+          <div class="experience-row-1">
+            <span>Self-Initiated</span>
+            <span>Remote</span>
+          </div>
+          <div class="experience-row-2">
+            <span>MrChat AI (Independent Project) <a href="https://github.com/mr-gaurishankar-khadga" target="_blank"
+                style="font-size: 7.5pt; color: #4b5563; text-decoration: underline; margin-left: 6px;">[Code]</a></span>
+            <span>01/2025 – Present</span>
+          </div>
+          <ul class="experience-bullets">
+            <li>Developed an interactive AI chat platform utilizing OpenAI API and modern NLP methodologies, supporting
+              concurrent chat sessions.</li>
+            <li>Configured secure JWT token-based authentication and structured chat history persistence with MongoDB,
+              ensuring &lt;100ms session validation.</li>
+            <li>Optimized server-side route architecture in Express to deliver fast, real-time message exchange loops,
+              reducing API response latency by 25%.</li>
+          </ul>
+        </div>
+
+        <div class="experience-item">
+          <div class="experience-row-1">
+            <span>Self-Initiated</span>
+            <span>Vadodara, India</span>
+          </div>
+          <div class="experience-row-2">
+            <span>Wenli.in (E-Commerce Platform) <a href="https://github.com/mr-gaurishankar-khadga" target="_blank"
+                style="font-size: 7.5pt; color: #4b5563; text-decoration: underline; margin-left: 6px;">[Code]</a></span>
+            <span>08/2024 – 12/2024</span>
+          </div>
+          <ul class="experience-bullets">
+            <li>Created a responsive, multi-page online shopping storefront driving a 95%+ mobile responsiveness score
+              on Google Lighthouse audits.</li>
+            <li>Integrated Stripe payment gateway API to securely capture customer credit card processing fields,
+              achieving 100% test transaction reliability.</li>
+            <li>Optimized database search indexes in MongoDB, reducing product filter and search query result latency by
+              40%.</li>
+          </ul>
+        </div>
+
+        <div class="experience-item">
+          <div class="experience-row-1">
+            <span>Self-Initiated</span>
+            <span>Vadodara, India</span>
+          </div>
+          <div class="experience-row-2">
+            <span>My Business (Management Platform) <a href="https://github.com/mr-gaurishankar-khadga" target="_blank"
+                style="font-size: 7.5pt; color: #4b5563; text-decoration: underline; margin-left: 6px;">[Code]</a></span>
+            <span>05/2024 – 07/2024</span>
+          </div>
+          <ul class="experience-bullets">
+            <li>Built an administrative inventory web dashboard, streamlining real-time tracking and logging of 500+
+              stock items.</li>
+            <li>Engineered interactive financial revenue reports utilizing custom-styled Chart.js canvases, reducing
+              monthly inventory audit times by 60%.</li>
+          </ul>
+        </div>
+
+        <div class="experience-item">
+          <div class="experience-row-1">
+            <span>Open Source Registry</span>
+            <span>NPM</span>
+          </div>
+          <div class="experience-row-2">
+            <span>Developer Utility Packages (gsharpi, mstar, quickx) <a
+                href="https://www.npmjs.com/~mrgaurishankarkhadga" target="_blank"
+                style="font-size: 7.5pt; color: #4b5563; text-decoration: underline; margin-left: 6px;">[NPM
+                Profile]</a></span>
+            <span>2024 – Present</span>
+          </div>
+          <ul class="experience-bullets">
+            <li>Created and published `gsharpi` framework, reducing structural CLI boilerplate setup time by 70% for
+              Node.js developers.</li>
+            <li>Published utility script packages `mstar` and `quickx` to automate development tasks, accumulating 100+
+              downloads.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Education -->
+    <div class="section">
+      <h2 class="section-title">Education</h2>
+      <div class="education-list">
+
+        <div class="education-item">
+          <div class="education-row-1">
+            <span>Parul University</span>
+            <span>Vadodara, India</span>
+          </div>
+          <div class="education-row-2">
+            <span>B.Tech in Computer Science Engineering (AIML)</span>
+            <span>2025 – Present</span>
+          </div>
+          <div class="education-sub">Pursuing (Currently in 3rd Year)</div>
+        </div>
+
+        <div class="education-item">
+          <div class="education-row-1">
+            <span>Parul University</span>
+            <span>Vadodara, India</span>
+          </div>
+          <div class="education-row-2">
+            <span>Diploma in Computer Engineering</span>
+            <span>2022 – 2025</span>
+          </div>
+          <div class="education-sub">Completed | Grade: 8.7 CGPA</div>
+        </div>
+
+        <div class="education-item">
+          <div class="education-row-1">
+            <span>Shree Narendra Memorial Higher Secondary School</span>
+            <span>Saptari, Nepal</span>
+          </div>
+          <div class="education-row-2">
+            <span>Secondary School Education (SEE)</span>
+            <span>2022</span>
+          </div>
+          <div class="education-sub">Completed | Grade: GPA 3.32 / 4.00 (83%)</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+</html>
