@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mrgaurishankar.netlify.app/sitemap.xml
